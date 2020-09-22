@@ -285,8 +285,9 @@ def affineAlign(
 
 def deformableAlign(
     fixed, moving,
-    fixed_vox, moving_vox,
-    affine_matrix,
+    fixed_vox=None,
+    moving_vox=None,
+    affine_matrix=None,
     ncc_radius=8,
     gradient_smoothing=1.0,
     field_smoothing=0.5,
@@ -351,6 +352,7 @@ def distributedDeformableAlign(
     block_size=[112,112,112],
     overlap=8, 
     distributed_state=None,
+    **kwargs
     ):
     """
     """
@@ -397,11 +399,20 @@ def distributedDeformableAlign(
 
     # deform all chunks
     compute_blocks = [x + 2*overlap for x in block_size] + [3,]
-    deformation = da.map_overlap(
-        lambda v,w,x,y,z: deformableAlign(v, w, x, y, z),
-        fixed_da, moving_da, depth=overlap,
-        dtype=np.float32, chunks=compute_blocks, new_axis=[3,],
-        x=fixed_vox, y=fixed_vox, z=np.eye(4),
+
+    from functools import partial
+    deformable_align = partial(deformableAlign,
+                               fixed_vox=fixed_vox,
+                               moving_vox=moving_vox,
+                               affine_matrix=np.eye(4))
+
+    deformation = da.map_overlap(deformable_align,
+                                 fixed_da, moving_da,
+                                 depth=overlap,
+                                 dtype=np.float32,
+                                 chunks=compute_blocks,
+                                 new_axis=[3,],
+                                 **kwargs
     ).compute()
 
     # release resources
