@@ -74,7 +74,7 @@ def rigidAlign(
     irm = sitk.ImageRegistrationMethod()
     ncores = int(os.environ["LSB_DJOB_NUMPROC"])  # LSF specific!
     irm.SetNumberOfThreads(2*ncores)
-    irm.SetInterpolator(sitk.sitkLinear)
+    irm.SetInterpolator(sitk.sitkNearestNeighbor)
 
     # metric, built for speed
     irm.SetMetricAsMeanSquares()

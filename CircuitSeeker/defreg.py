@@ -99,10 +99,11 @@ def getLinearRegistrationModel(
     """
 
     # set up registration object
-    ncores = int(os.environ["LSB_DJOB_NUMPROC"])  # LSF specific!
-    sitk.ProcessObject.SetGlobalDefaultNumberOfThreads(2*ncores)
+    # ncores = int(os.environ["LSB_DJOB_NUMPROC"]) * 2  # LSF specific!
+    ncores = len(os.sched_getaffinity(0))
+    sitk.ProcessObject.SetGlobalDefaultNumberOfThreads(ncores)
     irm = sitk.ImageRegistrationMethod()
-    irm.SetNumberOfThreads(2*ncores)
+    irm.SetNumberOfThreads(ncores)
     irm.SetInterpolator(sitk.sitkLinear)
 
     # metric
@@ -141,19 +142,21 @@ def getDeformableRegistrationModel(
     shrink_factors,
     smooth_sigmas,
     ncc_radius,
+        callback_savename=''
     ):
     """
     """
 
     # set up registration object
-    ncores = int(os.environ["LSB_DJOB_NUMPROC"])  # LSF specific!
-    sitk.ProcessObject.SetGlobalDefaultNumberOfThreads(2*ncores)
+    # ncores = int(os.environ["LSB_DJOB_NUMPROC"]) * 2 # LSF specific!
+    ncores = len(os.sched_getaffinity(0))
+    sitk.ProcessObject.SetGlobalDefaultNumberOfThreads(ncores)
     irm = sitk.ImageRegistrationMethod()
-    irm.SetNumberOfThreads(2*ncores)
+    irm.SetNumberOfThreads(ncores)
     irm.SetInterpolator(sitk.sitkLinear)
 
     # metric
-    irm.SetMetricAsANTSNeighborhoodCorrelation(ncc_radius)
+    irm.SetMetricAsANTSNeighborhoodCorrelation(ncc_radius)  ## might take a list
     irm.MetricUseFixedImageGradientFilterOff()
 
     # optimizer
@@ -180,10 +183,17 @@ def getDeformableRegistrationModel(
 
     # callback
     def callback(irm):
+        
         level = irm.GetCurrentLevel()
         iteration = irm.GetOptimizerIteration()
         metric = irm.GetMetricValue()
+        
         print("LEVEL: ", level, " ITERATION: ", iteration, " METRIC: ", metric)
+
+        if callback_savename:
+            with open(callback_savename, 'a') as fp:
+                fp.write(f'LEVEL: {level} ITERATION: {iteration} METRIC: {metric}')
+        
     irm.AddCommand(sitk.sitkIterationEvent, lambda: callback(irm))
     return irm
 
@@ -229,6 +239,9 @@ def rigidAlign(
     )
     etransform = sitk.Euler3DTransform()
     etransform.SetParameters(transform.GetParameters())
+
+    del fixed, moving, irm, transform
+    
     return affineTransformToMatrix(etransform)
 
 
@@ -280,9 +293,76 @@ def affineAlign(
     )
     atransform = sitk.AffineTransform(3)
     atransform.SetParameters(transform.GetParameters())
+
+    del fixed, moving, rigid, irm, affine, transform
     return affineTransformToMatrix(atransform)
 
 
+def denseDeformableAlign(
+        fixed, moving,
+        fixed_vox=None,
+        moving_vox=None,
+        affine_matrix=None,
+        ncc_radius=8,
+        gradient_smoothing=1.0,
+        field_smoothing=0.5,
+        shrink_factors=[2,],
+        smooth_sigmas=[2,],
+        learning_rate=1.0,
+        number_of_iterations=250,
+        callback_savename=''
+    ):
+    """
+    """
+
+    # convert to sitk images, set spacing
+    fixed, moving = numpyToSITK(fixed, moving, fixed_vox, moving_vox)
+    affine = matrixToAffineTransform(affine_matrix)
+
+    # set up registration object (image registration method)
+    irm = getDeformableRegistrationModel(
+        fixed_vox,
+        learning_rate,
+        number_of_iterations,
+        shrink_factors,
+        smooth_sigmas,
+        ncc_radius,
+        callback_savename=callback_savename
+    )
+
+    # initialize
+    df = sitk.Image(fixed.GetSize(), sitk.sitkVectorFloat64)
+    df.CopyInformation(fixed)
+    dft = sitk.DisplacementFieldTransform(df)
+
+    del df
+
+    dft.SetSmoothingGaussianOnUpdate(
+        varianceForUpdateField=gradient_smoothing,
+        varianceForTotalField=field_smoothing,
+    )
+    
+    irm.SetMovingInitialTransform(affine)
+    irm.SetInitialTransform(dft, inPlace=True)
+
+    # execute
+    deformation = irm.Execute(sitk.Cast(fixed, sitk.sitkFloat32),
+                              sitk.Cast(moving, sitk.sitkFloat32),
+   )
+
+    del dft
+    
+    # convert transform to displacement field
+    tdff = sitk.TransformToDisplacementFieldFilter()
+    tdff.SetReferenceImage(fixed)    
+    tdff.SetOutputPixelType(sitk.sitkVectorFloat32)
+
+    del fixed, moving, affine, irm
+    
+    return sitk.GetArrayFromImage(tdff.Execute(deformation))    
+
+    
+    
 def deformableAlign(
     fixed, moving,
     fixed_vox=None,
@@ -303,7 +383,7 @@ def deformableAlign(
     fixed, moving = numpyToSITK(fixed, moving, fixed_vox, moving_vox)
     affine = matrixToAffineTransform(affine_matrix)
 
-    # set up registration object
+    # set up registration object (image registration method)
     irm = getDeformableRegistrationModel(
         fixed_vox,
         learning_rate,
@@ -316,12 +396,19 @@ def deformableAlign(
     # initialize
     tdff = sitk.TransformToDisplacementFieldFilter()
     tdff.SetReferenceImage(fixed)
-    df = tdff.Execute(affine)
-    dft = sitk.DisplacementFieldTransform(df)
+
+    # no problem with applying sitk.GetArrayFromImage(df) to fixed image
+    # comes out exactly like applying the coordinate transform directly
+    df = tdff.Execute(affine)  ## [image] generate a displacement field from a coordinate transform
+
+    # no problem with also applying resampler.SetTrasform(dft) to fixed image
+    # comes out exactly like applying the coordinate transform directly
+    dft = sitk.DisplacementFieldTransform(df) ## consume an image to construct a displacement field transform
     dft.SetSmoothingGaussianOnUpdate(
         varianceForUpdateField=gradient_smoothing,
         varianceForTotalField=field_smoothing,
     )
+    ## perform the registration in-place so that the dft, the initial transform, is modified
     irm.SetInitialTransform(dft, inPlace=True)
 
 #    splines = sitk.BSplineTransformInitializer(
@@ -339,6 +426,8 @@ def deformableAlign(
     deformation = irm.Execute(sitk.Cast(fixed, sitk.sitkFloat32),
                               sitk.Cast(moving, sitk.sitkFloat32),
    )
+    ## when applied resampler.SetTrasform(deformation), it already
+    # gives a weird result
 
     # convert to displacement vector field and return as ndarray
     tdff.SetOutputPixelType(sitk.sitkVectorFloat32)
@@ -376,6 +465,7 @@ def distributedDeformableAlign(
             threads_per_worker=2,
             memory="15GB",
             mem=15000,
+            walltime="48:00",
         )
         ds.initializeClient()
         nchunks = np.ceil(np.array(fixed.shape)/block_size)
@@ -435,20 +525,17 @@ def applyTransformToImage(
     """
     """
 
-    # need matrix or displacement
-    error = "affine matrix or diplacement field required, but not both"
-    assert( (matrix is not None) != (displacement is not None) ), error
-
     # convert to sitk objects
     dtype = fixed.dtype
     fixed, moving = numpyToSITK(fixed, moving, fixed_vox, moving_vox)
-    if matrix is not None:
+    
+    if not [x for x in (matrix, displacement) if x is None]:
+        transform = sitk.CompositeTransform([matrixToAffineTransform(matrix),
+                                             displacementToTransform(displacement, fixed_vox)])
+    elif matrix is not None:
         transform = matrixToAffineTransform(matrix)
     elif displacement is not None:
-        displacement = displacement.astype(np.float64)
-        transform = sitk.GetImageFromArray(displacement, isVector=True)
-        transform.SetSpacing(fixed_vox[::-1])
-        transform = sitk.DisplacementFieldTransform(transform)
+        transform = displacementToTransform(displacement, fixed_vox)
 
     # set up resampler object
     resampler = sitk.ResampleImageFilter()
@@ -459,5 +546,50 @@ def applyTransformToImage(
 
     # execute, return as numpy array
     resampled = resampler.Execute(sitk.Cast(moving, sitk.sitkFloat32))
+
+    del fixed, moving, transform, resampler
+    
     return sitk.GetArrayFromImage(resampled).astype(dtype)
 
+
+def applyMultipleTransformToImage(vol, transformation_dict, verbose=False):
+
+    # apply transforms
+    for i, transform in enumerate(transformation_dict):
+        
+        label = transform['label']
+        xfm = transform['xfm']  ## either a matrix or a deformation field
+        fixed = transform['fixed']
+        fixed_vox = transform['fixed_vox']
+        moving_vox = transform['moving_vox']
+
+        ## figure out type of transformation
+        if isinstance(xfm, list):
+            
+            if verbose: print(f'Applying {label} composite deformation field...')
+            vol = applyTransformToImage(fixed, vol, fixed_vox, moving_vox, matrix=xfm[0], displacement=xfm[1])            
+            
+        
+        else: 
+            if xfm.shape == (4,4):  # must be a affine matrix
+
+                if verbose: print(f'Applying {label} affine transformation...')
+                vol = applyTransformToImage(fixed, vol, fixed_vox, moving_vox, matrix=xfm)
+
+            else:  # must be a deformation field
+
+                if verbose: print(f'Applying {label} deformation field...')
+                vol = applyTransformToImage(fixed, vol, fixed_vox, moving_vox, displacement=xfm)
+
+    return vol
+        
+
+
+def displacementToTransform(displacement, fixed_vox):
+
+    displacement = displacement.astype(np.float64)
+    transform = sitk.GetImageFromArray(displacement, isVector=True)
+    transform.SetSpacing(fixed_vox[::-1])
+    transform = sitk.DisplacementFieldTransform(transform)
+
+    return transform
