@@ -34,14 +34,15 @@ def globPaths(folder, prefix, suffix):
     return images
 
 
-def daskBagOfFilePaths(folder, prefix, suffix, npartitions=None):
+def daskBagOfFilePaths(folder, prefix, suffix, npartitions=None, slicer=None):
     """
     Returns dask.bag of absolute paths matching `folder/prefix*suffix`
     Specify bag partitions with `npartitions`; default None
     if `npartitions == None` then each filepath is its own partition
     """
-
     images = globPaths(folder, prefix, suffix)
+    if slicer is None: slicer = slice(len(images))
+    images = images[slicer]
     if npartitions is None: npartitions = len(images)
     return db.from_sequence(images, npartitions=npartitions)
 

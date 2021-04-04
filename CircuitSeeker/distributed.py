@@ -3,6 +3,7 @@ from dask_jobqueue import LSFCluster
 import dask.config
 from pathlib import Path
 import os
+from IPython.display import display
 
 
 class distributedState:
@@ -18,9 +19,12 @@ class distributedState:
         self.client = client
 
     def setCluster(self, cluster):
+        from analysis_toolbox.utils import print_client_links
+        print_client_links(cluster)
         self.cluster = cluster
 
     def scaleCluster(self, njobs):
+        print(f"Requesting {njobs} workers...")
         self.cluster.scale(jobs=njobs)
 
     def closeClient(self):
@@ -78,6 +82,7 @@ class distributedState:
             mem=mem,
             **kwargs,
         )
+
         self.setCluster(cluster)
 
 
@@ -102,4 +107,3 @@ class distributedState:
             self.setCluster(cluster)
         client = Client(self.cluster)
         self.setClient(client)
-
