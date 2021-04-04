@@ -27,16 +27,17 @@ def ensureArray(reference, dataset_path=None):
 
 
 def rigidAlign(
-    fixed, moving,
-    fixed_vox, moving_vox,
-    dataset_path=None,
-    metric_sample_percentage=0.1,
-    shrink_factors=[2,1],
-    smooth_sigmas=[1,0],
-    minStep=0.1,
-    learningRate=1.0,
-    numberOfIterations=50,
-    target_spacing=2.0,
+        fixed, moving,
+        fixed_vox, moving_vox,
+        dataset_path=None,
+        metric_sample_percentage=0.1,
+        shrink_factors=[2,1],
+        smooth_sigmas=[1,0],
+        minStep=0.1,
+        learningRate=1.0,
+        numberOfIterations=50,
+        target_spacing=2.0,
+        pad_fixed=False,
 ):
     """
     Returns rigid transform parameters aligning `fixed` coords to `moving` coords
@@ -53,6 +54,11 @@ def rigidAlign(
 
     # get moving/fixed images as ndarrays
     fixed = ensureArray(fixed, dataset_path)
+    if pad_fixed:
+        pad_nvoxels = np.round(pad_fixed / fixed_vox).astype('int')
+        fixed = np.pad(fixed, pad_width=((pad_nvoxels[0], pad_nvoxels[0]),
+                                         (pad_nvoxels[1], pad_nvoxels[1]),
+                                         (pad_nvoxels[2], pad_nvoxels[2])))
     moving = ensureArray(moving, dataset_path)
 
     # determine skip sample factors
@@ -121,6 +127,7 @@ def rigidAlignAndSave(
         learningRate=1.0,
         numberOfIterations=50,
         target_spacing=2.0,
+        pad_fixed=False,
         savepath=''
 ):
     transform = rigidAlign(fixed, moving, fixed_vox, moving_vox,
@@ -131,6 +138,7 @@ def rigidAlignAndSave(
                            minStep=minStep,
                            learningRate=learningRate,
                            numberOfIterations=numberOfIterations,
+                           pad_fixed=pad_fixed,
                            target_spacing=target_spacing)
 
     if savepath: np.save(savepath, transform)
@@ -159,7 +167,9 @@ def applyTransform(
         fixed_vox=None,
         resampled_slice=None,
         return_resampled_slice=False,
-        dataset_path=None):
+        dataset_path=None,
+        pad_fixed=False
+):
     """
     """
 
@@ -184,6 +194,13 @@ def applyTransform(
     if fixed is not None and fixed_vox is not None:
 
         fixed = ensureArray(fixed, dataset_path)
+
+        if pad_fixed:
+            pad_nvoxels = np.round(pad_fixed / fixed_vox).astype('int')
+            fixed = np.pad(fixed, pad_width=((pad_nvoxels[0], pad_nvoxels[0]),
+                                             (pad_nvoxels[1], pad_nvoxels[1]),
+                                             (pad_nvoxels[2], pad_nvoxels[2])))
+
         fixed = fixed.astype(np.float32)
         align_to_fixed = True
         fixed_im = sitk.GetImageFromArray(fixed)
@@ -226,7 +243,9 @@ def applyTransform(
     else:
         return zoomed
 
-def applyTransformAndSave(moving, moving_vox, params, fixed=None, fixed_vox=None, resampled_slice=None, return_resampled_slice=False, dataset_path=None, save_path='', chunks=(1,100,100)):
+def applyTransformAndSave(moving, moving_vox, params, fixed=None, fixed_vox=None,
+                          resampled_slice=None, return_resampled_slice=False, dataset_path=None, pad_fixed=False,
+                          save_path='', chunks=(1,100,100)):
     """Apply the transform with an option to save if `savepath` is provided
     moving [np.ndarray or str]: the moving image, usually the functional image
     moving_vox [np.ndarray]: voxel spacing
@@ -238,11 +257,11 @@ def applyTransformAndSave(moving, moving_vox, params, fixed=None, fixed_vox=None
     if return_resampled_slice:
         transformed, resampled_slice = applyTransform(moving, moving_vox, params, fixed=fixed, fixed_vox=fixed_vox,
                                                       resampled_slice=resampled_slice, return_resampled_slice=return_resampled_slice,
-                                                      dataset_path=dataset_path)
+                                                      dataset_path=dataset_path, pad_fixed=pad_fixed)
     else:
          transformed = applyTransform(moving, moving_vox, params, fixed=fixed, fixed_vox=fixed_vox,
                                       resampled_slice=resampled_slice, return_resampled_slice=return_resampled_slice,
-                                      dataset_path=dataset_path)
+                                      dataset_path=dataset_path, pad_fixed=pad_fixed)
 
 
     from analysis_toolbox.fileio import saveas_h5
@@ -284,7 +303,7 @@ def motionCorrect(
         fixed, fixed_vox, moving_vox,
         write_path=None, dataset_path=None,
         distributed_state=None, sigma=7,
-        transforms_dir=None, folder_slicer=None,
+        transforms_dir=None, folder_slicer=None, pad_fixed=False,
         params=None, t_chunksize=False, force_not_chunk=False,
         correct_another=None,
         t_indices=None,
@@ -348,7 +367,9 @@ def motionCorrect(
     ddataset_path = delayed(dataset_path)
 
     if params is None:
-        params = alignFramesToReference(frames, dfixed, dfixed_vox, dmoving_vox, sigma, ddataset_path, transforms_dir=transforms_dir, resume=resume)
+        params = alignFramesToReference(frames, dfixed, dfixed_vox, dmoving_vox,
+                                        sigma, ddataset_path,
+                                        transforms_dir=transforms_dir, resume=resume, pad_fixed=pad_fixed)
 
 
     # transform frames with params
@@ -492,7 +513,7 @@ def runAlignFramesToReference(
     fixed, fixed_vox, moving_vox,
     dataset_path=None,
     distributed_state=None, sigma=7,
-    transforms_dir=None, folder_slicer=None,
+        transforms_dir=None, folder_slicer=None, pad_fixed=False,
     **kwargs,
 ):
     """
@@ -530,7 +551,9 @@ def runAlignFramesToReference(
     dmoving_vox = delayed(moving_vox)
     ddataset_path = delayed(dataset_path)
 
-    params = alignFramesToReference(frames, dfixed, dfixed_vox, dmoving_vox, sigma, ddataset_path, transforms_dir=transforms_dir)
+    params = alignFramesToReference(frames, dfixed, dfixed_vox, dmoving_vox,
+                                    sigma, ddataset_path,
+                                    transforms_dir=transforms_dir, pad_fixed=pad_fixed)
 
     # release resources
     if distributed_state is None:
@@ -540,7 +563,9 @@ def runAlignFramesToReference(
     return params
 
 
-def alignFramesToReference(frames, dfixed, dfixed_vox, dmoving_vox, sigma, ddataset_path, resume=True, transforms_dir=None):
+def alignFramesToReference(frames, dfixed, dfixed_vox, dmoving_vox,
+                           sigma, ddataset_path,
+                           resume=True, transforms_dir=None, pad_fixed=False):
     """
     frames [db.Bag]: dask bag of file paths
     """
@@ -554,7 +579,7 @@ def alignFramesToReference(frames, dfixed, dfixed_vox, dmoving_vox, sigma, ddata
         from analysis_toolbox.utils import find_files
         from tqdm.notebook import tqdm
 
-        actual_param_savepaths = find_files(transforms_dir + '/', grep='TM', ext='npy', return_path=True)['path']
+        actual_param_savepaths = find_files(transforms_dir + '/', grep='TM', ext='npy', compute_path=True)['path']
 
         if len(actual_param_savepaths) == 0:
 
@@ -574,8 +599,8 @@ def alignFramesToReference(frames, dfixed, dfixed_vox, dmoving_vox, sigma, ddata
 
         savepaths = db.from_sequence(expected_param_savepaths)
 
-    params = frames.map(lambda b,c,w,x,y,z: rigidAlignAndSave(w,b,x,y, dataset_path=z, savepath=c),
-                        w=dfixed, x=dfixed_vox, y=dmoving_vox, z=ddataset_path, c=savepaths,
+    params = frames.map(lambda b,c,d,w,x,y,z: rigidAlignAndSave(w,b,x,y, dataset_path=z, pad_fixed=d, savepath=c),
+                        w=dfixed, x=dfixed_vox, y=dmoving_vox, z=ddataset_path, d=pad_fixed, c=savepaths,
     ).compute()
 
     if not resume:
@@ -605,7 +630,8 @@ def alignFramesToReference(frames, dfixed, dfixed_vox, dmoving_vox, sigma, ddata
 def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, dataset_path,
                                    resampled_slice=None,
                                    slice_transformed=(slice(None), slice(None), slice(None)),
-                                   index_first=False, write_path='', fixed=None, fixed_vox=None):
+                                   index_first=False, write_path='',
+                                   fixed=None, fixed_vox=None, pad_fixed=False):
     """Apply transform to a few frames instead of one at a time
     Relies on a for loop at the end which accepts a single frame and param set.
 
@@ -664,7 +690,7 @@ def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, 
 
         out  = [applyTransformAndSave(frame_path, moving_vox, param,
                                       dataset_path=dataset_path, save_path=save_path,
-                                      fixed=fixed, fixed_vox=fixed_vox, resampled_slice=resampled_slice)  \
+                                      fixed=fixed, fixed_vox=fixed_vox, resampled_slice=resampled_slice, pad_fixed=pad_fixed)  \
                 for frame_path, param, save_path in zip(indexed_frame_paths, indexed_params, indexed_save_paths)]
 
         del params, indices, indexed_frame_paths, indexed_params  ## atttmpt to save memeory
@@ -672,7 +698,7 @@ def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, 
     else:
         out = [applyTransformAndSave(frame_paths[index], moving_vox, params[index],
                                      dataset_path=dataset_path, save_path=save_paths[index],
-                                     fixed=fixed, fixed_vox=fixed_vox, resampled_slice=resampled_slice) \
+                                     fixed=fixed, fixed_vox=fixed_vox, resampled_slice=resampled_slice, pad_fixed=pad_fixed) \
                for index in indices]
 
         del params, indices
@@ -681,7 +707,8 @@ def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, 
 
 
 def applyTransformToFrames(frames, params, dmoving_vox, ddataset_path,
-                           slice_transformed=(slice(None), slice(None), slice(None)), write_path=None, fixed=None, fixed_vox=None):
+                           slice_transformed=(slice(None), slice(None), slice(None)), write_path=None,
+                           fixed=None, fixed_vox=None, pad_fixed=False):
     """
     frames [db.Bag]: a dask bag either containing paths or a tzyx dask array
     params [np.ndarray]: params corresponding to the frames
@@ -694,8 +721,8 @@ def applyTransformToFrames(frames, params, dmoving_vox, ddataset_path,
 
     # apply transforms to all images
     params = db.from_sequence(params, npartitions=npartitions)
-    transformed = frames.map(lambda b,x,y,z: applyTransform(b,x,y, dataset_path=z, fixed=p, fixed_vox=q),
-                             x=dmoving_vox, y=params, z=ddataset_path, p=fixed, q=fixed_vox,
+    transformed = frames.map(lambda b,x,y,z,p,q,r: applyTransform(b,x,y, dataset_path=z, fixed=p, fixed_vox=q, pad_fixed=r),
+                             x=dmoving_vox, y=params, z=ddataset_path, p=fixed, q=fixed_vox, r=pad_fixed,
     ).to_delayed()
 
     # convert to a (lazy) 4D dask array
@@ -741,14 +768,14 @@ def distributedImageMean(
     if csio.testPathExtensionForHDF5(suffix):
         frames = csio.daskArrayBackedByHDF5(folder, prefix, suffix, dataset_path)
         nframes = frames.shape[0]
-        ds.scaleCluster(njobs=nframes)
+        if distributed_state is None: ds.scaleCluster(njobs=nframes)
         frames_mean = frames.mean(axis=0).compute()
         frames_mean = np.round(frames_mean).astype(frames[0].dtype)
     # other types use dask.bag
     else:
         frames = csio.daskBagOfFilePaths(folder, prefix, suffix)
         nframes = frames.npartitions
-        ds.scaleCluster(njobs=nframes)
+        if distributed_state is None: ds.scaleCluster(njobs=nframes)
         frames_mean = frames.map(csio.readImage).reduction(sum, sum).compute()
         dtype = frames_mean.dtype
         frames_mean = np.round(frames_mean/np.float(nframes)).astype(dtype)
