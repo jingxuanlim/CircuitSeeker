@@ -8,6 +8,8 @@ import dask.bag as db
 import dask.array as da
 
 
+from dask.delayed import delayed
+
 def testPathExtensionForHDF5(image_path):
     """
     Returns true if `image_path` has an hdf5 like extension
@@ -56,8 +58,13 @@ def daskArrayBackedByHDF5(folder, prefix, suffix, dataset_path):
     error_message = "daskArrayBackedByHDF5 requires hdf5 files with .h5 or .hdf5 extension"
     assert (testPathExtensionForHDF5(suffix)), error_message
     images = globPaths(folder, prefix, suffix)
-    dsets = [readHDF5(image, dataset_path) for image in images]
-    arrays = [da.from_array(dset, chunks=(256,)*dset.ndim) for dset in dsets]
+
+    ex = readHDF5(images[0], dataset_path)
+    readHDF5_d = lambda img: da.from_delayed(
+        delayed(readHDF5)(img, dataset_path), ex.shape, ex.dtype
+    )
+    arrays = [readHDF5_d(image) for image in images]
+
     return da.stack(arrays, axis=0)
 
 
@@ -68,7 +75,7 @@ def readHDF5(image_path, dataset_path):
 
     error_message = "readHDF5 requires hdf5 files with .h5 or .hdf5 extension"
     assert (testPathExtensionForHDF5(image_path)), error_message
-    return h5py.File(image_path, 'r')[dataset_path]
+    return h5py.File(image_path, 'r')[dataset_path][:]
 
 
 def readImage(image_path, dataset_path=None):
