@@ -78,6 +78,21 @@ def readHDF5(image_path, dataset_path):
     return h5py.File(image_path, 'r')[dataset_path][:]
 
 
+def return_file_name(path):
+    import ntpath
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
+
+def return_dir(path):
+    import os
+    return os.path.dirname(path)
+
+def format_integer_to_zebrascope_standard(integer, CM):
+    """convert an interger string into a stack file indexing format
+    """
+
+    return f'TM{str(integer).zfill(7)}_CM{CM}_CHN00'
+
 def readImage(image_path, dataset_path=None):
     """
     Returns array like object for dataset at `image_path`
@@ -87,12 +102,46 @@ def readImage(image_path, dataset_path=None):
     File format must be either hdf5 or supported by SimpleITK file readers
     """
 
-    if testPathExtensionForHDF5(image_path):
-        assert(dataset_path is not None), "Must provide dataset_path for .h5/.hdf5 files"
-        return readHDF5(image_path, dataset_path)
-    else:
-        return sitk.GetArrayFromImage(sitk.ReadImage(image_path))
+    try:
+        if testPathExtensionForHDF5(image_path):
+            assert(dataset_path is not None), "Must provide dataset_path for .h5/.hdf5 files"
+            return readHDF5(image_path, dataset_path)
+        else:
+            return sitk.GetArrayFromImage(sitk.ReadImage(image_path))
+    except:
 
+        import shutil
+        import os
+
+
+        filename = return_file_name(image_path)
+        directory = return_dir(image_path)
+        timepoint = int(filename[2:9])
+        CM = int(filename[12:13])
+
+        if timepoint > 0:
+            replacement_timepoint = timepoint - 1
+        else:
+            replacement_timepoint = timepoint + 1
+
+        replacement_filename = format_integer_to_zebrascope_standard(replacement_timepoint, CM)+ '.h5'
+        replacement_path = os.path.join(directory, replacement_filename)
+
+        ## make a note about offending file
+        pre, ext = os.path.splitext(image_path)
+        txt_path = pre + '.txt'
+
+        ## if txt_path exists, h5 file was already replaced once
+        if os.path.exists(txt_path):
+            raise
+        else:
+            with open(txt_path, 'w') as f:
+                f.write(f"Cannot be read. Replaced by: {replacement_path}")
+
+        os.rename(image_path, image_path.replace('/TM', '/original_TM'))
+        shutil.copy(replacement_path, image_path)
+
+        return readImage(image_path, dataset_path=dataset_path)
 
 def writeHDF5(image_path, dataset_path, array):
     """
