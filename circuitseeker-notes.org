@@ -1,0 +1,834 @@
+#+title: CircuitSeeker Notes
+
+* <2023-06-22 Thu> motionCorrect no longer runs without error after PRFS migration
+** Undefined variable
+*** Takes 3 hours to run grep on my dm11 directory
+#+begin_src
+-*- mode: grep; default-directory: "/ssh:ws1:/groups/ahrens/home/limj2/" -*-
+Grep started at Thu Jun 22 01:28:29
+
+grep --color=auto -nH --null -r -e "num_tchunks" *
+
+Grep finished with no matches found at Thu Jun 22 03:29:00
+#+end_src
+
+*** Diff between the current and  <2023-06-09 Fri> of Circuitseeker
+#+begin_src bash
+> diff -syqr ~limj2/RESTORED/CircuitSeeker ~limj2/CircuitSeeker
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/bdist.linux-x86_64/egg/CircuitSeeker.egg-link and /groups/ahrens/home/limj2/CircuitSeeker/build/bdist.linux-x86_64/egg/CircuitSeeker.egg-link are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_image_histogram.npy and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/data/confocal/training_image_histogram.npy are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/data/.DS_Store and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/data/.DS_Store are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/defreg.py and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/defreg.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/distributed.py and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/distributed.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/fileio.py and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/fileio.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/_init.py and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/init_.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/mocorr.py and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/mocorr.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/networks.py and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/networks.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/build/lib/CircuitSeeker/structseg.py and /groups/ahrens/home/limj2/CircuitSeeker/build/lib/CircuitSeeker/structseg.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/data/confocal/training_image_histogram.npy and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/data/confocal/training_image_histogram.npy are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/data/.DS_Store and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/data/.DS_Store are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/defreg.py and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/defreg.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/distributed.py and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/distributed.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/fileio.py and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/fileio.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_init.py and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/init_.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/mocorr.py and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/mocorr.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/networks.py and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/networks.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/defreg.cpython-37.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/defreg.cpython-37.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/distributed.cpython-311.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/distributed.cpython-311.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/distributed.cpython-36.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/distributed.cpython-36.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/distributed.cpython-37.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/distributed.cpython-37.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/fileio.cpython-311.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/fileio.cpython-311.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/fileio.cpython-36.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/fileio.cpython-36.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/fileio.cpython-37.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/fileio.cpython-37.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/init.cpython-311.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache/init_.cpython-311.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/init.cpython-36.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache/init_.cpython-36.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/init.cpython-37.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache/init_.cpython-37.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/mocorr.cpython-311.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/mocorr.cpython-311.pyc differ
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/mocorr.cpython-36.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/mocorr.cpython-36.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/_pycache/mocorr.cpython-37.pyc and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/pycache_/mocorr.cpython-37.pyc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker/structseg.py and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker/structseg.py are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker.egg-info/dependency_links.txt and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker.egg-info/dependency_links.txt are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker.egg-info/PKG-INFO and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker.egg-info/PKG-INFO are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker.egg-info/requires.txt and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker.egg-info/requires.txt are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker.egg-info/SOURCES.txt and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker.egg-info/SOURCES.txt are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/CircuitSeeker.egg-info/top_level.txt and /groups/ahrens/home/limj2/CircuitSeeker/CircuitSeeker.egg-info/top_level.txt are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/dist/CircuitSeeker-0.0.4-py3.7.egg and /groups/ahrens/home/limj2/CircuitSeeker/dist/CircuitSeeker-0.0.4-py3.7.egg are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/COMMIT_EDITMSG and /groups/ahrens/home/limj2/CircuitSeeker/.git/COMMIT_EDITMSG are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/config and /groups/ahrens/home/limj2/CircuitSeeker/.git/config are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/description and /groups/ahrens/home/limj2/CircuitSeeker/.git/description are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/HEAD and /groups/ahrens/home/limj2/CircuitSeeker/.git/HEAD are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/applypatch-msg.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/applypatch-msg.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/commit-msg.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/commit-msg.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/fsmonitor-watchman.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/fsmonitor-watchman.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/post-update.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/post-update.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/pre-applypatch.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/pre-applypatch.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/pre-commit.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/pre-commit.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/pre-merge-commit.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/pre-merge-commit.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/prepare-commit-msg.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/prepare-commit-msg.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/pre-push.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/pre-push.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/pre-rebase.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/pre-rebase.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/pre-receive.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/pre-receive.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/hooks/update.sample and /groups/ahrens/home/limj2/CircuitSeeker/.git/hooks/update.sample are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/index and /groups/ahrens/home/limj2/CircuitSeeker/.git/index differ
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/info/exclude and /groups/ahrens/home/limj2/CircuitSeeker/.git/info/exclude are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/logs/HEAD and /groups/ahrens/home/limj2/CircuitSeeker/.git/logs/HEAD are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/logs/refs/heads/deformable-test and /groups/ahrens/home/limj2/CircuitSeeker/.git/logs/refs/heads/deformable-test are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/logs/refs/heads/master and /groups/ahrens/home/limj2/CircuitSeeker/.git/logs/refs/heads/master are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/logs/refs/remotes/origin/deformable-test and /groups/ahrens/home/limj2/CircuitSeeker/.git/logs/refs/remotes/origin/deformable-test are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/logs/refs/remotes/origin/HEAD and /groups/ahrens/home/limj2/CircuitSeeker/.git/logs/refs/remotes/origin/HEAD are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/03/117edf0550acb119c12b8aa3c104e970f925aa and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/03/117edf0550acb119c12b8aa3c104e970f925aa are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/05/8e2a02cc871bacf692adbc3b8bf2e4cd1c76e8 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/05/8e2a02cc871bacf692adbc3b8bf2e4cd1c76e8 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/07/78ec72b836c5ac8ead7f0463a7ce684bc62afd and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/07/78ec72b836c5ac8ead7f0463a7ce684bc62afd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/09/1cff91a674dd7c4eb17859ead65a86d1ca599e and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/09/1cff91a674dd7c4eb17859ead65a86d1ca599e are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/09/71f27b465f57042b451dd133142fa6ea17a38e and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/09/71f27b465f57042b451dd133142fa6ea17a38e are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/0d/35f49b5595c0853b93bdc3abd21e4aaea4486c and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/0d/35f49b5595c0853b93bdc3abd21e4aaea4486c are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/11/a9b8e2b0f76953ba6f76b38ffe2560ed959184 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/11/a9b8e2b0f76953ba6f76b38ffe2560ed959184 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/13/34db4c336b3522a8d4bfa93eebbb658fed1bfa and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/13/34db4c336b3522a8d4bfa93eebbb658fed1bfa are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/14/56479a86922da4796c0c92ee2b3ef6f9cee284 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/14/56479a86922da4796c0c92ee2b3ef6f9cee284 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/1d/6819c929942b884d8e7da4bffdadf16c049f88 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/1d/6819c929942b884d8e7da4bffdadf16c049f88 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/1f/16d56b3f38c968b3ce1ad2fc5a9fab951c99da and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/1f/16d56b3f38c968b3ce1ad2fc5a9fab951c99da are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/1f/b4b29e2c0c73f72c802e24590b93b4a6da7fd0 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/1f/b4b29e2c0c73f72c802e24590b93b4a6da7fd0 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/1f/de067d185b1c397a9efce65d6442f20da44b12 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/1f/de067d185b1c397a9efce65d6442f20da44b12 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/23/a715483c538defed1009b49996c413b075c310 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/23/a715483c538defed1009b49996c413b075c310 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/25/15b92379660b7a11d3e039f25a065ebdd84a0b and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/25/15b92379660b7a11d3e039f25a065ebdd84a0b are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/25/81336c5aa2ab2943adf20f377d311fc424a536 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/25/81336c5aa2ab2943adf20f377d311fc424a536 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/26/701cc81e69c1b1288a8d2bb3642018f03d186a and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/26/701cc81e69c1b1288a8d2bb3642018f03d186a are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/27/c2ca20a4c5ac63f5233fcf14d1471727016449 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/27/c2ca20a4c5ac63f5233fcf14d1471727016449 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/28/f645fdd9ef4f647ba1fb5e3a3bf37354d8c92e and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/28/f645fdd9ef4f647ba1fb5e3a3bf37354d8c92e are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/29/1e03a3c60359f7f49fb7a3e894aadca852afc1 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/29/1e03a3c60359f7f49fb7a3e894aadca852afc1 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/29/49e87dd4466e491b7520a56f4b8a32304d579b and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/29/49e87dd4466e491b7520a56f4b8a32304d579b are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/2b/0b7746d3cecfd52fdcb6cd1440d90eba602642 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/2b/0b7746d3cecfd52fdcb6cd1440d90eba602642 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/31/d96455d0986a879e2de583ec14b7bee81e86da and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/31/d96455d0986a879e2de583ec14b7bee81e86da are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/33/ceab0b3eba131213eb26dd9706b69f088fa41d and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/33/ceab0b3eba131213eb26dd9706b69f088fa41d are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/33/d266c1b51515e2a564bc477aba6330bea618a4 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/33/d266c1b51515e2a564bc477aba6330bea618a4 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/35/5fd60413222f3e953af70ce68f84aed9f60e33 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/35/5fd60413222f3e953af70ce68f84aed9f60e33 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/37/28ab8a4368346b02a48955f531bf247a2df1ff and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/37/28ab8a4368346b02a48955f531bf247a2df1ff are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/3a/1ddff94659f8454a3ab40723c2221ee2626593 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/3a/1ddff94659f8454a3ab40723c2221ee2626593 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/3c/007dfe3921c1cb03a834a709f0fe1b42541585 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/3c/007dfe3921c1cb03a834a709f0fe1b42541585 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/3d/dcff8dbd060c3c97569e9456a46dbe46652df6 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/3d/dcff8dbd060c3c97569e9456a46dbe46652df6 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/42/2c3b6db07f5a6641da9e264481bde55a636d4c and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/42/2c3b6db07f5a6641da9e264481bde55a636d4c are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/42/54043ba3750cc4a7a2361b8783cfffa8f17559 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/42/54043ba3750cc4a7a2361b8783cfffa8f17559 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/42/79351274e3fe014e32afdceefa13707e15c62b and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/42/79351274e3fe014e32afdceefa13707e15c62b are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/42/88c25b85c69425ecc99f8238824a16cd7a2af8 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/42/88c25b85c69425ecc99f8238824a16cd7a2af8 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/42/af2ec1b0166fb055ea266f1f58c6a82dbf2436 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/42/af2ec1b0166fb055ea266f1f58c6a82dbf2436 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/44/6220c9bb44eaf013a2670a3ff156b71cdf3337 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/44/6220c9bb44eaf013a2670a3ff156b71cdf3337 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/46/77bd0fc38602e3ea4b79c2a1ad1deaa8de39d8 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/46/77bd0fc38602e3ea4b79c2a1ad1deaa8de39d8 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/49/e705c214bfa922444577f7b06472bd7ac2e947 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/49/e705c214bfa922444577f7b06472bd7ac2e947 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/4b/54b8e6f4b2e46d8fa5a8deb4b57bcc73b47fc1 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/4b/54b8e6f4b2e46d8fa5a8deb4b57bcc73b47fc1 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/4b/97ca923a705a5b94436501cb96c0e82c8602b0 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/4b/97ca923a705a5b94436501cb96c0e82c8602b0 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/4e/c741b29b248bb61c7002f8ed0b45bb925b4f23 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/4e/c741b29b248bb61c7002f8ed0b45bb925b4f23 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/51/87d3bf560347404a069293790ff0313b91f6ac and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/51/87d3bf560347404a069293790ff0313b91f6ac are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/54/101606f065788b7531f5d6e7c13b56c48e12cd and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/54/101606f065788b7531f5d6e7c13b56c48e12cd are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/59/9b02c7c1d596378ff1e37ae78a3701d9f9594b and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/59/9b02c7c1d596378ff1e37ae78a3701d9f9594b are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/5b/62e40e085b8f1f24ede382e14d370953b0c4be and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/5b/62e40e085b8f1f24ede382e14d370953b0c4be are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/5e/5e5090e19dd3d9dd2720bdb70103a83914db8a and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/5e/5e5090e19dd3d9dd2720bdb70103a83914db8a are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/61/c8464d970f7beda88f439430e29e9fa7f86904 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/61/c8464d970f7beda88f439430e29e9fa7f86904 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/63/638dd29f47620ea0e2340a66f5c096f5a55f90 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/63/638dd29f47620ea0e2340a66f5c096f5a55f90 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/65/4fb216262413f98da3ee2dd4a7bc459832ae0e and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/65/4fb216262413f98da3ee2dd4a7bc459832ae0e are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/6e/025e1289386c34cfdbc06c49837f43a1121d9b and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/6e/025e1289386c34cfdbc06c49837f43a1121d9b are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/6e/e87f419849aa642236315f7bb5d22b59dab356 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/6e/e87f419849aa642236315f7bb5d22b59dab356 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/6f/2ece4910c139bb0bdcf17beb48c8aa7d233d1d and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/6f/2ece4910c139bb0bdcf17beb48c8aa7d233d1d are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/71/def8735a2aa23cd3832606473c094ddd74696a and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/71/def8735a2aa23cd3832606473c094ddd74696a are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/74/185f0a3abaa537a3698aaaa38208774d63bada and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/74/185f0a3abaa537a3698aaaa38208774d63bada are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/75/64b632b2aec8def7dd5b75124842c057136a85 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/75/64b632b2aec8def7dd5b75124842c057136a85 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/75/ffcd46988b7676c87ef11f94c3d15f701c19c2 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/75/ffcd46988b7676c87ef11f94c3d15f701c19c2 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/7a/5e6439b8c130b720cb5b7e7f4c4e9fb4b93da4 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/7a/5e6439b8c130b720cb5b7e7f4c4e9fb4b93da4 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/7b/55907da7ecea96126d53ec44c2d60617282756 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/7b/55907da7ecea96126d53ec44c2d60617282756 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/7c/de7db54b69b14a219ee39c520a742012811601 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/7c/de7db54b69b14a219ee39c520a742012811601 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/82/8adb9f24bce5031d7bd4184df21dda45d7f66f and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/82/8adb9f24bce5031d7bd4184df21dda45d7f66f are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/84/c7bcfd881be5500cd006b91365f1e329db26c3 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/84/c7bcfd881be5500cd006b91365f1e329db26c3 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/88/48e76fd9020735f61935c9fae71a47051c079c and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/88/48e76fd9020735f61935c9fae71a47051c079c are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/89/bc4489d3d6cf68dcfd5b1e0fc9df6aa6822b63 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/89/bc4489d3d6cf68dcfd5b1e0fc9df6aa6822b63 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/8e/1efa08d97779d457db011980635b563edb86ea and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/8e/1efa08d97779d457db011980635b563edb86ea are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/8e/b66ac8120a6ffb803e18191a4f1d8248a57b30 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/8e/b66ac8120a6ffb803e18191a4f1d8248a57b30 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/90/d06380b8c9946f1c19905f9e1295ea8264563a and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/90/d06380b8c9946f1c19905f9e1295ea8264563a are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/91/7f203fa72fe0cf291a9fdb0a9e7c1dc9219192 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/91/7f203fa72fe0cf291a9fdb0a9e7c1dc9219192 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/93/9c1415aa657b9917a2bcc173016654d54b66b7 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/93/9c1415aa657b9917a2bcc173016654d54b66b7 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/96/356fbd62905a8c68b27436d2573e23038417d1 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/96/356fbd62905a8c68b27436d2573e23038417d1 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/97/1add18658b09153bf9a6e37545e199a249a759 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/97/1add18658b09153bf9a6e37545e199a249a759 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/98/9992b2f64a53e3ce5a42e86dd679f7c0955b9f and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/98/9992b2f64a53e3ce5a42e86dd679f7c0955b9f are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/9e/507e0d9f376aa38c3a11b6dea028860f9f467c and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/9e/507e0d9f376aa38c3a11b6dea028860f9f467c are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/a9/27f82586a540903e4fca4fc31dc8d7b13e72ba and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/a9/27f82586a540903e4fca4fc31dc8d7b13e72ba are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/a9/69edcee7158f30e56ec013eb762296046862d9 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/a9/69edcee7158f30e56ec013eb762296046862d9 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/aa/7ef66ef9ac401ba2f4176f3fddef9e6f5a8db4 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/aa/7ef66ef9ac401ba2f4176f3fddef9e6f5a8db4 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/ae/668a220bb6ea68aee12f0dbfc1a3737cee1462 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/ae/668a220bb6ea68aee12f0dbfc1a3737cee1462 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/ae/f157a6a6d363bc9c07526c3ac7b286187a74cc and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/ae/f157a6a6d363bc9c07526c3ac7b286187a74cc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b0/047fa49f09537200023a679a676db5c8173cfc and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b0/047fa49f09537200023a679a676db5c8173cfc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b1/0650801a93853bfe5832c73c19cde2ba93f620 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b1/0650801a93853bfe5832c73c19cde2ba93f620 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b2/9caf12578dfd82138636061022ce245c007953 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b2/9caf12578dfd82138636061022ce245c007953 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b2/b6fc78880f7e60e5c1a7ceb738c0b65d389ada and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b2/b6fc78880f7e60e5c1a7ceb738c0b65d389ada are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b3/3da2774e4cbd6f0c904dd14af42120b82c9de8 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b3/3da2774e4cbd6f0c904dd14af42120b82c9de8 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b3/bc061e5cf875ebc60c69ce8df9bff352a8b6a1 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b3/bc061e5cf875ebc60c69ce8df9bff352a8b6a1 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b4/7c640dfd914c478f6fe3ab034c0f05aea4316e and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b4/7c640dfd914c478f6fe3ab034c0f05aea4316e are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b7/3e1a6faa51554bfbf73bef498db6141506c40f and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b7/3e1a6faa51554bfbf73bef498db6141506c40f are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b7/7302c5a3cd5f5ee2ccc7a4f45202253a413bf9 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b7/7302c5a3cd5f5ee2ccc7a4f45202253a413bf9 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b7/bd61522bbd2f08757af416a42e5bf99b7a4c32 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b7/bd61522bbd2f08757af416a42e5bf99b7a4c32 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/b9/538442759bccc0ebd10303ebd09eefe7f324ee and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/b9/538442759bccc0ebd10303ebd09eefe7f324ee are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/bb/a70ffea727e3a1a89f8fc85ab6f8d12f61c8dc and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/bb/a70ffea727e3a1a89f8fc85ab6f8d12f61c8dc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/bd/19fac760b30c2eb8689ba92ea17e003cf4d6e3 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/bd/19fac760b30c2eb8689ba92ea17e003cf4d6e3 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/bf/2022b0553a82bb0f3b8171c53e1d6ef94256ba and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/bf/2022b0553a82bb0f3b8171c53e1d6ef94256ba are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/bf/6ee587784cdd2cbbcd1589037ae552be9ddef6 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/bf/6ee587784cdd2cbbcd1589037ae552be9ddef6 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/bf/d9b867295e5ca03e969f9cc7e11ac422985428 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/bf/d9b867295e5ca03e969f9cc7e11ac422985428 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/c9/f072a34e50018ab4ba1a8a788e9784ddc36921 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/c9/f072a34e50018ab4ba1a8a788e9784ddc36921 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/ca/f91fe5c2f499fc66e7376d5733028ef35758f3 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/ca/f91fe5c2f499fc66e7376d5733028ef35758f3 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/cb/5f971717e7a35dbc029bfc058d33e2c89c83ec and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/cb/5f971717e7a35dbc029bfc058d33e2c89c83ec are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/cb/a7885e8b82336c2e299f12a3f25b49ba9e2a90 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/cb/a7885e8b82336c2e299f12a3f25b49ba9e2a90 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/cd/93dad900a8e410d652173cdde3166582134f4c and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/cd/93dad900a8e410d652173cdde3166582134f4c are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/cf/5b7027966fbb31e1cd6758145ac18d8f721ae7 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/cf/5b7027966fbb31e1cd6758145ac18d8f721ae7 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/cf/645fb1987f825b81848ec343da6d2a458d2384 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/cf/645fb1987f825b81848ec343da6d2a458d2384 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/d0/50854cd4afaeee5e948486ace3a95fa39c9289 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/d0/50854cd4afaeee5e948486ace3a95fa39c9289 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/d9/3988b20b9468f65941973b83e3fbf33063f65e and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/d9/3988b20b9468f65941973b83e3fbf33063f65e are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/e2/9ea6446563c0896f12d7cf09a425d7b18fddea and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/e2/9ea6446563c0896f12d7cf09a425d7b18fddea are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/e6/25baa349e623f6941af6eb8e07add50c617342 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/e6/25baa349e623f6941af6eb8e07add50c617342 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/e6/ece066b78307c650ec930534ff17f57ae5dc14 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/e6/ece066b78307c650ec930534ff17f57ae5dc14 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/e8/94ffe78c1d4f303ab225d260fe91618dcc4e2f and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/e8/94ffe78c1d4f303ab225d260fe91618dcc4e2f are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/ea/4b7884b453a1b500bb6ec042338606fb321649 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/ea/4b7884b453a1b500bb6ec042338606fb321649 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/eb/472494d31ea53313ca428eda768939283a8f88 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/eb/472494d31ea53313ca428eda768939283a8f88 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/ec/1c8434a0e827f5a9ab3f32ec8e2d3e09d05abc and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/ec/1c8434a0e827f5a9ab3f32ec8e2d3e09d05abc are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/ed/08a1e8415b4aa0a54e984f39e9c7710bb4473e and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/ed/08a1e8415b4aa0a54e984f39e9c7710bb4473e are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/ee/b3e8cdd45b93d129d47d5d34e9473b02254d7a and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/ee/b3e8cdd45b93d129d47d5d34e9473b02254d7a are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/f1/dc63b6dcba73635d21886358a7252ecb55d062 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/f1/dc63b6dcba73635d21886358a7252ecb55d062 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/f4/a552faf7bdca9634895e96dc4819ac6a91369d and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/f4/a552faf7bdca9634895e96dc4819ac6a91369d are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/f5/d9f37f3f7759e644a425ef0cb7ead5c666e08f and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/f5/d9f37f3f7759e644a425ef0cb7ead5c666e08f are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/f6/bc1183c6c16237e3aac51893ee4f3453588957 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/f6/bc1183c6c16237e3aac51893ee4f3453588957 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/f8/b2b548b8a568c77610c2ce0bada9002a3018d8 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/f8/b2b548b8a568c77610c2ce0bada9002a3018d8 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/f9/6c819930992f59f9f34b2bc31095191fcd6c69 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/f9/6c819930992f59f9f34b2bc31095191fcd6c69 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/fa/7890d9c6c6a2b869ed2b7b1d1a456d03742d5f and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/fa/7890d9c6c6a2b869ed2b7b1d1a456d03742d5f are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/objects/fc/fb669748ac633889068a9621dc4fe6c51f9230 and /groups/ahrens/home/limj2/CircuitSeeker/.git/objects/fc/fb669748ac633889068a9621dc4fe6c51f9230 are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/packed-refs and /groups/ahrens/home/limj2/CircuitSeeker/.git/packed-refs are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/refs/heads/deformable-test and /groups/ahrens/home/limj2/CircuitSeeker/.git/refs/heads/deformable-test are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/refs/heads/master and /groups/ahrens/home/limj2/CircuitSeeker/.git/refs/heads/master are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/refs/remotes/origin/deformable-test and /groups/ahrens/home/limj2/CircuitSeeker/.git/refs/remotes/origin/deformable-test are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.git/refs/remotes/origin/HEAD and /groups/ahrens/home/limj2/CircuitSeeker/.git/refs/remotes/origin/HEAD are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/.gitignore and /groups/ahrens/home/limj2/CircuitSeeker/.gitignore are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/LICENSE.txt and /groups/ahrens/home/limj2/CircuitSeeker/LICENSE.txt are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/MANIFEST.in and /groups/ahrens/home/limj2/CircuitSeeker/MANIFEST.in are identical
+Files /groups/ahrens/home/limj2/RESTORED/CircuitSeeker/setup.py and /groups/ahrens/home/limj2/CircuitSeeker/setup.py are identical
+#+end_src
+
+#+RESULTS:
+
+** No difference between current and latest running version of ~mocorr.py~ and associated files
+*** motionCorrect ran without fail on <2023-06-09 Fri>
+See: [[file:/ssh:ws1:/groups/ahrens/home/limj2/RESTORED/restored-20230609/analysis-toolbox_segmentation/simplify_cell_segmentation.ipynb]]
+
+screenshot
+[[file:img/motionCorrect-runs-on-20230609.png]]
+
+- This must mean that the version of ~motionCorrect~ ran here doesn't have that offending undefined variable.
+
+*** Python likely ran ~mocorr.py~ or ~mocorr.cpython-311.pyc~ on <2023-06-09 Fri>
+Dired readout of the CircuitSeeker directory:
+#+begin_src bash
+  /ssh:ws1:/groups/ahrens/home/limj2/RESTORED/restored-20230609/CircuitSeeker/CircuitSeeker:
+  total used in directory 71K available 898.2 GiB
+  drwxrwsr-x 2 limj2 ahrens 4.0K Sep 21  2020 data
+  -rw-rw-r-- 1 limj2 ahrens  18K Jan 19  2021 defreg.py
+  -rw-rw-r-- 1 limj2 ahrens 3.1K Feb 16  2021 distributed.py
+  -rw-rw-r-- 1 limj2 ahrens 6.0K Aug  9  2022 fileio.py
+  -rw-rw-r-- 1 limj2 ahrens    5 Sep 21  2020 __init__.py
+  -rw-rw-r-- 1 limj2 ahrens  39K Feb 19 02:07 mocorr.py
+  drwxrwsr-x 2 limj2 ahrens 4.0K Sep 21  2020 networks
+  -rw-rw-r-- 1 limj2 ahrens 1.2K Sep 21  2020 networks.py
+  drwxrwsr-x 2 limj2 ahrens 4.0K Feb 19 02:07 __pycache__
+  -rw-rw-r-- 1 limj2 ahrens 2.9K Sep 21  2020 structseg.py
+#+end_src
+
+Dired readout of the ~__pycache__~ directory:
+#+begin_src bash
+  /ssh:ws1:/groups/ahrens/home/limj2/RESTORED/restored-20230609/CircuitSeeker/CircuitSeeker/__pycache__:
+  total used in directory 117K available 898.2 GiB
+  drwxrwsr-x 2 limj2 ahrens 4.0K Feb 19 02:07 .
+  drwxrwsr-x 2 limj2 ahrens 4.0K Aug  9  2022 ..
+  -rw-rw-r-- 1 limj2 ahrens  12K Jan 19  2021 defreg.cpython-37.pyc
+  -rw-rw-r-- 1 limj2 ahrens 5.0K Feb 19 01:49 distributed.cpython-311.pyc
+  -rw-rw-r-- 1 limj2 ahrens 3.4K Feb 16  2021 distributed.cpython-36.pyc
+  -rw-rw-r-- 1 limj2 ahrens 3.3K Sep 21  2020 distributed.cpython-37.pyc
+  -rw-rw-r-- 1 limj2 ahrens 9.9K Feb 19 01:49 fileio.cpython-311.pyc
+  -rw-rw-r-- 1 limj2 ahrens 6.2K Aug  9  2022 fileio.cpython-36.pyc
+  -rw-rw-r-- 1 limj2 ahrens 4.8K Sep 21  2020 fileio.cpython-37.pyc
+  -rw-rw-r-- 1 limj2 ahrens  169 Feb 19 01:49 __init__.cpython-311.pyc
+  -rw-rw-r-- 1 limj2 ahrens  148 Feb 16  2021 __init__.cpython-36.pyc
+  -rw-rw-r-- 1 limj2 ahrens  152 Sep 21  2020 __init__.cpython-37.pyc
+  -rw-rw-r-- 1 limj2 ahrens  42K Feb 19 02:07 mocorr.cpython-311.pyc
+  -rw-rw-r-- 1 limj2 ahrens  22K Dec 29 01:19 mocorr.cpython-36.pyc
+  -rw-rw-r-- 1 limj2 ahrens 7.3K Sep 21  2020 mocorr.cpython-37.pyc
+#+end_src
+
+- We see that despite the run on <2023-06-09 Fri>, both ~mocorr.py~ and ~mocorr.cpython-311.pyc~ were modified at an earlier time, on <2023-02-19 Sun>.
+- ~mocorr.cpython-36.pyc~ and ~mocorr.cpython-37.pyc~ were modified earlier, on <2022-12-29 Thu> and <2020-09-21 Mon>  respectively.
+- This makes it unlikely that python ran either  ~mocorr.cpython-36.pyc~ or ~mocorr.cpython-37.pyc~ on <2023-06-09 Fri>.
+- This is also consistent with the ~conda env~ I'm on, which runs python 3.11.
+*** However, both ~mocorr.py~ and ~mocorr.cpython-311.pyc~ contains ~num_tchunks~
+Output of grep:
+#+begin_src bash
+-*- mode: grep; default-directory: "/ssh:ws1:/groups/ahrens/home/limj2/RESTORED/restored-20230609/" -*-
+Grep started at Mon Jun 26 14:57:13
+
+grep --color=auto -nH --null -r -e "num_tchunks" *
+Binary file CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc matches
+Binary file CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc matches
+CircuitSeeker/CircuitSeeker/mocorr.py 409:    if (nframes > chunksize or num_tchunks) and not force_not_chunk:
+
+Grep finished with 1 match found at Mon Jun 26 14:57:17
+#+end_src
+
+- ~mocorr.py~ already consisted of the offending variable ~num_tchunks~.
+- ~mocorr.cpython-311.pyc~ is not human readable, but also contains the offending variable ~num_tchunks~
+
+Same results when search for ~Applying over chunks of frames...~
+#+begin_src bash
+-*- mode: grep; default-directory: "/ssh:ws1:/groups/ahrens/home/limj2/RESTORED/restored-20230609/CircuitSeeker/" -*-
+Grep started at Mon Jun 26 16:01:07
+
+grep --color=auto -nH --null -r -e "Applying over chunks of frames..." *
+Binary file CircuitSeeker/__pycache__/mocorr.cpython-311.pyc matches
+Binary file CircuitSeeker/__pycache__/mocorr.cpython-36.pyc matches
+CircuitSeeker/mocorr.py 411:        print("Applying over chunks of frames...")
+
+Grep finished with 1 match found at Mon Jun 26 16:01:10
+#+end_src
+*** I was unable to decompile ~mocorr.cpython-311.pyc~
+Excerpt from [[file:/ssh:ws1:/groups/ahrens/home/limj2/RESTORED/decompilation-tests/mocorr-311.py]]
+#+begin_src python
+def motionCorrect(folder, prefix, suffix, fixed, fixed_vox, moving_vox, fixed_slice, moving_slice, write_path, dataset_path, distributed_state, sigma, transforms_dir, time_stride, folder_slicer, pad_fixed, params, t_chunksize, force_not_chunk, correct_another, t_indices, resample_with_fixed, resampled_slice, slice_transformed, resume = ((slice(None), slice(None), slice(None)), (slice(None), slice(None), slice(None)), None, None, None, 7, None, 1, None, False, None, False, False, None, None, False, None, (slice(None), slice(None), slice(None)), False), **kwargs):
+    """Perform motion correction on functional imaging data
+    folder [str]: path to folder with functional imaging data files
+    prefix [str]: prefix of .h5 files (e.g. 'TM')
+    suffix [str]: suffix of .h5 files (e.g. '.h5')
+    fixed [str or np.ndarray]: the reference image
+    fixed_vox [np.ndarray]: fixed voxel spacing
+    moving_vox [np.ndarray]: moving voxel spacing
+    write_path [str]: where the transforms are written
+    dataset_path [str]: the location of the dataset in a h5 file
+    distributed_state [distributed_state, None, False]:
+        distribute_state:
+        None: if None is supplied, then one will be created for you
+        False: none is supplied and  you don't want one to be created for you
+    sigma [int]:
+    transforms_dir [str]: path to where the transformed images are saved
+    folder_slicer [slice]: if only a portion of frames in folders are of interest
+    params [np.ndarray]: transformation params
+    t_chunksize [bool/int]: size of chunks determining whether or not to chunk the arrays. chunking reduces the size of the task graph
+    force_not_chunk [bool]: force not to chunk. takes precedence over 't_chunksize'
+    correct_another [da.Array]: dask array of another set of frames that the transformations will be applied
+    t_indices [np.ndarray]: only transform select frames (only works when chunking and starting fresh)
+    slice_transformed [tuple]: slice the transformed image as early as possible, right after it was transformed in an attempt to save memory
+    resample_with_fixed [bool]: whether or not to use the fixed image in the resampling step
+    """
+    pass
+# WARNING: Decompyle incomplete
+#+end_src
+
+- I was unable to decompile ~mocorr.cpython-311.pyc~
+
+I tried disassembling  ~mocorr.cpython-311.pyc~ and it showed that ~num_tchunks~ exists but not in what context. Output here: [[file:/ssh:ws1:/groups/ahrens/home/limj2/RESTORED/decompilation-tests/mocorr-311-das]]
+*** Decompiling ~mocorr.cpython-36.py~, we find that ~num_tchunks~ already exists since <2022-12-29 Thu>
+
+#+begin_src python
+def motionCorrect(folder, prefix, suffix, fixed, fixed_vox, moving_vox, fixed_slice, moving_slice, write_path, dataset_path, distributed_state, sigma, transforms_dir, time_stride, folder_slicer, pad_fixed, params, t_chunksize, force_not_chunk, correct_another, t_indices, resample_with_fixed, resampled_slice, slice_transformed, resume = ((slice(None), slice(None), slice(None)), (slice(None), slice(None), slice(None)), None, None, None, 7, None, 1, None, False, None, False, False, None, None, False, None, (slice(None), slice(None), slice(None)), False), **kwargs):
+    """Perform motion correction on functional imaging data
+    folder [str]: path to folder with functional imaging data files
+    prefix [str]: prefix of .h5 files (e.g. 'TM')
+    suffix [str]: suffix of .h5 files (e.g. '.h5')
+    fixed [str or np.ndarray]: the reference image
+    fixed_vox [np.ndarray]: fixed voxel spacing
+    moving_vox [np.ndarray]: moving voxel spacing
+    write_path [str]: where the transforms are written
+    dataset_path [str]: the location of the dataset in a h5 file
+    distributed_state [distributed_state, None, False]:
+        distribute_state:
+        None: if None is supplied, then one will be created for you
+        False: none is supplied and  you don't want one to be created for you
+    sigma [int]:
+    transforms_dir [str]: path to where the transformed images are saved
+    folder_slicer [slice]: if only a portion of frames in folders are of interest
+    params [np.ndarray]: transformation params
+    t_chunksize [bool/int]: size of chunks determining whether or not to chunk the arrays. chunking reduces the size of the task graph
+    force_not_chunk [bool]: force not to chunk. takes precedence over 't_chunksize'
+    correct_another [da.Array]: dask array of another set of frames that the transformations will be applied
+    t_indices [np.ndarray]: only transform select frames (only works when chunking and starting fresh)
+    slice_transformed [tuple]: slice the transformed image as early as possible, right after it was transformed in an attempt to save memory
+    resample_with_fixed [bool]: whether or not to use the fixed image in the resampling step
+    """
+    ds = distributed_state
+    if distributed_state is None:
+        ds = csd.distributedState()
+        ds.modifyConfig({
+            'distributed.comm.timeouts.connect': '60s',
+            'distributed.comm.timeouts.tcp': '180s' })
+        ds.initializeLSFCluster()
+        ds.initializeClient()
+    frame_paths = csio.globPaths(folder, prefix, suffix)
+    nframes = len(frame_paths)
+    frames = csio.daskBagOfFilePaths(folder, prefix, suffix, folder_slicer, **('slicer',))
+    if distributed_state is None:
+        if 'max_workers' in kwargs.keys():
+            max_workers = kwargs['max_workers']
+        else:
+            max_workers = 1250
+        ds.scaleCluster(min(nframes, max_workers), **('njobs',))
+    dfixed = delayed(fixed)
+    dfixed_vox = delayed(fixed_vox)
+    dmoving_vox = delayed(moving_vox)
+    ddataset_path = delayed(dataset_path)
+    if params is None:
+        params = alignFramesToReference(frame_paths, dfixed, dfixed_vox, dmoving_vox, sigma, ddataset_path, fixed_slice, moving_slice, transforms_dir, resume, pad_fixed, time_stride, **('fixed_slice', 'moving_slice', 'transforms_dir', 'resume', 'pad_fixed', 'time_stride'))
+    chunksize = 5000
+    if (nframes > chunksize or num_tchunks) and not force_not_chunk:
+        print('Applying over chunks of frames...')
+        if correct_another is not None:
+            frames_to_correct = correct_another
+        else:
+            frames_to_correct = folder
+        if not t_chunksize:
+            t_chunksize = 10
+        find_files = find_files
+        import analysis_toolbox.utils
+        actual_write_paths = find_files(write_path + '/', 'h5', True, **('ext', 'compute_paths'))['path']
+        CM = frame_paths[0][-12:-9]
+        if resume:
+            tqdm = tqdm
+            import tqdm.notebook
+            print('Resuming application of transforms...')
+            format_integer_to_zebrascope_standard = format_integer_to_zebrascope_standard
+            import analysis_toolbox.dataset_helper
+            expected_write_paths = (lambda .0 = None: [ write_path + f'''/{format_integer_to_zebrascope_standard(index, CM)}.h5''' for index in .0 ])(np.arange(len(params)))
+            missing_write_paths = np.setdiff1d(expected_write_paths, actual_write_paths)
+            missing_indices = None((lambda .0 = None: [ np.where(np.array(expected_write_paths) == missing_write_path)[0][0] for missing_write_path in .0 ])(tqdm(missing_write_paths)))
+            if len(actual_write_paths) == 0:
+                print('nothing computed yet, start fresh!')
+                if t_indices is None:
+                    t_indices = np.arange(nframes)
+                npartitions = len(t_indices) // t_chunksize
+                indices = db.from_sequence(t_indices, npartitions, **('npartitions',))
+                computing = True
+            elif len(missing_indices) > 0:
+                print(f'''{len(missing_indices)}/{len(expected_write_paths)} missing''')
+                npartitions = len(missing_indices) // t_chunksize
+                indices = db.from_sequence(missing_indices, npartitions, **('npartitions',))
+                computing = True
+            elif len(missing_indices) == 0:
+                computing = False
+            else:
+                print('Starting fresh!')
+                if t_indices is None:
+                    t_indices = np.arange(nframes)
+                npartitions = len(t_indices) // t_chunksize
+                indices = db.from_sequence(t_indices, npartitions, **('npartitions',))
+                computing = True
+        if computing:
+            if isinstance(frames_to_correct, str):
+                (filename, fileext) = os.path.splitext(frames_to_correct)
+                if fileext == '.zarr':
+                    import zarr
+                    frame_paths = zarr.open(frames_to_correct, 'r', **('mode',))
+                else:
+                    frame_paths = np.array(csio.globPaths(frames_to_correct, '.h5', 'TM', **('suffix', 'prefix')))
+            elif isinstance(frames_to_correct, da.Array):
+                fileext = None
+            if resample_with_fixed:
+                resampling_fixed = fixed
+                if resampled_slice is None:
+                    print('Computing resampled_slice...')
+                    resampled_slice_ref_index = 0
+                    print(frame_paths[resampled_slice_ref_index])
+                    (_, resampled_slice) = applyTransform(frame_paths[resampled_slice_ref_index], moving_vox, params[resampled_slice_ref_index], fixed_slice, moving_slice, resampling_fixed, fixed_vox, True, dataset_path, pad_fixed, **('fixed_slice', 'moving_slice', 'fixed', 'fixed_vox', 'return_resampled_slice', 'dataset_path', 'pad_fixed'))
+                else:
+                    print('resampled_slice defined.')
+                print(f'''Resampled slice: {resampled_slice}''')
+            else:
+                resampling_fixed = None
+            transformed = indices.map_partitions(applyTransformToChunksOfFrames, frames_to_correct, transforms_dir + '/params.npy', moving_vox, dataset_path, fixed_slice, moving_slice, resampled_slice, slice_transformed, write_path, resampling_fixed, dfixed_vox, pad_fixed, **('frame_dir', 'params_path', 'moving_vox', 'dataset_path', 'fixed_slice', 'moving_slice', 'resampled_slice', 'slice_transformed', 'write_path', 'fixed', 'fixed_vox', 'pad_fixed')).to_delayed()
+            if write_path is None:
+                indices_len = list(indices.map_partitions((lambda x: len(x))).compute())
+                if isinstance(frames_to_correct, str):
+                    example_image = csio.readImage(frames.compute()[0], dataset_path, **('dataset_path',))[...]
+                elif isinstance(frames_to_correct, da.Array):
+                    example_image = frames_to_correct[0]
+                shape = example_image.shape
+                dtype = example_image.dtype
+                arrays = (lambda .0 = None: pass# WARNING: Decompyle incomplete
+)(zip(transformed, indices_len))
+                transformed = da.concatenate(arrays, 0, **('axis',))
+            else:
+                to_dask = to_dask
+                import fish.util.fileio
+                transformed = to_dask(actual_write_paths)
+        else:
+            print('Applying over frames...')
+            if correct_another is not None:
+                if isinstance(correct_another, str):
+                    correct_another = da.from_zarr(correct_another)
+                frames_to_correct = db.from_sequence(correct_another, correct_another.shape[0], **('npartitions',))
+            else:
+                frames_to_correct = frames
+            if resample_with_fixed:
+                resampled_slice_ref_index = 0
+                print(frame_paths[resampled_slice_ref_index])
+                resampling_fixed = dfixed
+                (_, resampled_slice) = applyTransform(frame_paths[resampled_slice_ref_index], moving_vox, params[resampled_slice_ref_index], resampling_fixed, dfixed_vox, fixed_slice, moving_slice, True, dataset_path, pad_fixed, **('fixed', 'fixed_vox', 'fixed_slice', 'moving_slice', 'return_resampled_slice', 'dataset_path', 'pad_fixed'))
+                print(f'''Resampled slice: {resampled_slice}''')
+            else:
+                resampling_fixed = None
+            transformed = applyTransformToFrames(frames_to_correct, params, dmoving_vox, ddataset_path, slice_transformed, write_path, dfixed, dfixed_vox, fixed_slice, moving_slice, pad_fixed, **('slice_transformed', 'write_path', 'fixed', 'fixed_vox', 'fixed_slice', 'moving_slice', 'pad_fixed'))
+    if distributed_state is None:
+        ds.closeClient()
+    return (params, transformed, resampled_slice)
+#+end_src
+
+- Decompiling ~mocorr.cpython-36.py~, we find that ~num_tchunks~ already exists since <2022-12-29 Thu>
+- The ~num_tchunks~ variable is not defined anywhere else in the python file, which means that it should be an ~undefined variable~.
+- This is confusing, as I don't remember encountering the ~undefined variable~ error ever.
+
+*** Decompiled ~mocorr.cpython-37.py~ doesn't have ~num_tchunks~, but also doesn't have other aspects of the output
+#+begin_src python
+def motionCorrect(folder, prefix, suffix, fixed, fixed_vox, moving_vox, write_path, dataset_path, distributed_state, sigma, transforms_dir = (None, None, 7, None), **kwargs):
+    '''
+    '''
+    ds = distributed_state
+    if distributed_state is None:
+        ds = csd.distributedState()
+        ds.modifyConfig({
+            'distributed.comm.timeouts.connect': '60s',
+            'distributed.comm.timeouts.tcp': '180s' })
+        ds.initializeLSFCluster([
+            '-P scicompsoft'], **('job_extra',))
+        ds.initializeClient()
+    frames = csio.daskBagOfFilePaths(folder, prefix, suffix)
+    nframes = frames.npartitions
+    if 'max_workers' in kwargs.keys():
+        max_workers = kwargs['max_workers']
+    else:
+        max_workers = 1250
+    ds.scaleCluster(min(nframes, max_workers), **('njobs',))
+    dfixed = delayed(fixed)
+    dfixed_vox = delayed(fixed_vox)
+    dmoving_vox = delayed(moving_vox)
+    ddataset_path = delayed(dataset_path)
+    params = frames.map((lambda b, w, x, y, z: rigidAlign(w, b, x, y, z, **('dataset_path',))), dfixed, dfixed_vox, dmoving_vox, ddataset_path, **('w', 'x', 'y', 'z')).compute()
+    params = np.array(list(params))
+    params = percentile_filter(params, 50, np.ones((3, 1)), **('footprint',))
+    params = gaussian_filter1d(params, sigma, 0, **('axis',))
+    if transforms_dir is not None:
+        paths = list(frames)
+        for ind, p in enumerate(params):
+            transform = _parametersToRigidMatrix(p)
+            basename = os.path.splitext(os.path.basename(paths[ind]))[0]
+            path = os.path.join(transforms_dir, basename) + '_rigid.mat'
+            np.savetxt(path, transform)
+
+    params = db.from_sequence(params, nframes, **('npartitions',))
+    transformed = frames.map((lambda b, x, y, z: applyTransform(b, x, y, z, **('dataset_path',))), dmoving_vox, params, ddataset_path, **('x', 'y', 'z')).to_delayed()
+    sh = transformed[0][0].shape.compute()
+    dd = transformed[0][0].dtype.compute()
+    arrays = (lambda .0 = None: [ da.from_delayed(t[0], sh, dd, **('dtype',)) for t in .0 ])(transformed)
+    transformed = da.stack(arrays, 0, **('axis',))
+    compressor = Blosc('zstd', 9, Blosc.BITSHUFFLE, **('cname', 'clevel', 'shuffle'))
+    transformed_disk = zarr.open(write_path, 'w', transformed.shape, (256, 10, 256, 256), transformed.dtype, compressor, **('shape', 'chunks', 'dtype', 'compressor'))
+    da.to_zarr(transformed, transformed_disk)
+    if distributed_state is None:
+        ds.closeClient()
+    return transformed_disk
+#+end_src
+
+- Decompiled ~mocorr.cpython-37.py~ doesn't have ~num_tchunks~, but also doesn't have the print statement with ~"Applying over chunks of frames..."~ which I know should be present in the functional code, which makes it unlikely to be the version that was run.
+*** It is likely that either ~mocorr.py~ or ~mocorr.cpython-311.pyc~  was run on <2023-06-09 Fri>, but neither of them are functional!
+** Writing back to Ken Carlie
+Thanks for restoring the requested files.
+
+I still can't figure out what went wrong. The jupyter notebook from 9 June shows that the offending function ran successfully. However, both .py and pycache file (mocorr.py and mocorr.cpython-311.pyc) from that day contains the offending variable that python complains is undefined (and is actually undefined when I checked).
+
+1. While the variable exists in `mocorr.cpython-311.pyc`, I wasn't successful in decompiling that code into a human-readable format so I am not actually sure what context it exists in and whether it is truly undefined. I tried and wasn't successful with `pycdc`(https://github.com/zrax/pycdc). I was wondering if it is possible to get help on this.
+
+2. The offending variable exists in both py and pyc versions of the code. While we don't know if the variable is undefinied in the pyc version, it likely has the same code as the py version. If that's the case, is there a possibility that yet another piece of code ran? I only found out and understood the existence of the pyc piece of code from your `diff` showing that `mocorr.cpython-311.pyc` is different (if not in content, then possibly date modified). Do you know if there are other versions of the code that could exist elsewhere that I should check? To be clear about how I run this function, I install the package in "development mode" by doing something like this.
+
+ ```
+ cd /groups/ahrens/home/limj2/Circuitseeker
+/groups/ahrens/home/limj2/anaconda3/bin/pip install -e .
+ ```
+3. Finally, because the version recovered (10 Jun version) was backed up after the last known successful run and while Robert Lines verified that there were no changes to `mocorr.py` across all backed up versions, it is still possible that `mocorr.cpython-311.pyc` was modified shortly after the successful run. Just to be sure, I would like to do similar checks in other backups that I know worked. Could you help me recover those versions as well?
+
+```
+RESTORED_ROOT: `/groups/ahrens/home/limj2/RESTORED/`
+| Dates            | Status   | Target directory                                |
+|------------------+----------+-------------------------------------------------|
+| <2023-06-04 Sun> |          | <RESTORED_ROOT>/restored-20230604/CircuitSeeker |
+| <2023-06-05 Mon> |          | <RESTORED_ROOT>/restored-20230605/CircuitSeeker |
+| <2023-06-06 Tue> |          | <RESTORED_ROOT>/restored-20230606/CircuitSeeker |
+| <2023-06-08 Thu> |          | <RESTORED_ROOT>/restored-20230608/CircuitSeeker |
+| <2023-06-09 Fri> |          | <RESTORED_ROOT>/restored-20230609/CircuitSeeker |
+| <2023-06-10 Sat> | RESTORED | <RESTORED_ROOT>/restored-20230610/CircuitSeeker |
+```
+
+** There aren't any differences in the versions of ~mocorr.py~, ~mocorr.cpython-311.pyc~, and in fact the whole ~Circuitseeker~ directory between <2023-06-04 Sun>  and <2023-06-10 Sat>
+*** Checks for ~mocorr.py~
+#+begin_src bash
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py restored-20230604/CircuitSeeker/mocorr.py
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230604/CircuitSeeker/mocorr.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py restored-20230605/CircuitSeeker/mocorr.py
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230605/CircuitSeeker/mocorr.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py restored-20230606/CircuitSeeker/mocorr.py
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230606/CircuitSeeker/mocorr.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py restored-20230607/CircuitSeeker/mocorr.py
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230607/CircuitSeeker/mocorr.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py restored-20230608/CircuitSeeker/mocorr.py
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230608/CircuitSeeker/mocorr.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py restored-20230609/CircuitSeeker/mocorr.py
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230609/CircuitSeeker/mocorr.py are identical
+#+end_src
+
+*** Checks for ~mocorr.cpython-311.pyc~
+#+begin_src
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc restored-20230604/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230604/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc restored-20230605/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230605/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc restored-20230606/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230606/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc restored-20230607/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230607/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc restored-20230608/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230608/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc restored-20230609/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230609/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+#+end_src
+
+*** Checks for the whole directory shows that nothing differs
+#+begin_src
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/ restored-20230609/CircuitSeeker/
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd and restored-20230609/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd and restored-20230609/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd and restored-20230609/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd and restored-20230609/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_image_histogram.npy and restored-20230609/CircuitSeeker/data/confocal/training_image_histogram.npy are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/.DS_Store and restored-20230609/CircuitSeeker/data/.DS_Store are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/defreg.py and restored-20230609/CircuitSeeker/defreg.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/distributed.py and restored-20230609/CircuitSeeker/distributed.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/fileio.py and restored-20230609/CircuitSeeker/fileio.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__init__.py and restored-20230609/CircuitSeeker/__init__.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230609/CircuitSeeker/mocorr.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json and restored-20230609/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 and restored-20230609/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json and restored-20230609/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 and restored-20230609/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 and restored-20230609/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks.py and restored-20230609/CircuitSeeker/networks.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/defreg.cpython-37.pyc and restored-20230609/CircuitSeeker/__pycache__/defreg.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-311.pyc and restored-20230609/CircuitSeeker/__pycache__/distributed.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-36.pyc and restored-20230609/CircuitSeeker/__pycache__/distributed.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-37.pyc and restored-20230609/CircuitSeeker/__pycache__/distributed.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-311.pyc and restored-20230609/CircuitSeeker/__pycache__/fileio.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-36.pyc and restored-20230609/CircuitSeeker/__pycache__/fileio.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-37.pyc and restored-20230609/CircuitSeeker/__pycache__/fileio.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-311.pyc and restored-20230609/CircuitSeeker/__pycache__/__init__.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-36.pyc and restored-20230609/CircuitSeeker/__pycache__/__init__.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-37.pyc and restored-20230609/CircuitSeeker/__pycache__/__init__.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230609/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc and restored-20230609/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc and restored-20230609/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/structseg.py and restored-20230609/CircuitSeeker/structseg.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/ restored-20230608/CircuitSeeker/
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd and restored-20230608/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd and restored-20230608/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd and restored-20230608/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd and restored-20230608/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_image_histogram.npy and restored-20230608/CircuitSeeker/data/confocal/training_image_histogram.npy are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/.DS_Store and restored-20230608/CircuitSeeker/data/.DS_Store are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/defreg.py and restored-20230608/CircuitSeeker/defreg.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/distributed.py and restored-20230608/CircuitSeeker/distributed.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/fileio.py and restored-20230608/CircuitSeeker/fileio.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__init__.py and restored-20230608/CircuitSeeker/__init__.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230608/CircuitSeeker/mocorr.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json and restored-20230608/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 and restored-20230608/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json and restored-20230608/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 and restored-20230608/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 and restored-20230608/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks.py and restored-20230608/CircuitSeeker/networks.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/defreg.cpython-37.pyc and restored-20230608/CircuitSeeker/__pycache__/defreg.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-311.pyc and restored-20230608/CircuitSeeker/__pycache__/distributed.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-36.pyc and restored-20230608/CircuitSeeker/__pycache__/distributed.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-37.pyc and restored-20230608/CircuitSeeker/__pycache__/distributed.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-311.pyc and restored-20230608/CircuitSeeker/__pycache__/fileio.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-36.pyc and restored-20230608/CircuitSeeker/__pycache__/fileio.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-37.pyc and restored-20230608/CircuitSeeker/__pycache__/fileio.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-311.pyc and restored-20230608/CircuitSeeker/__pycache__/__init__.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-36.pyc and restored-20230608/CircuitSeeker/__pycache__/__init__.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-37.pyc and restored-20230608/CircuitSeeker/__pycache__/__init__.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230608/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc and restored-20230608/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc and restored-20230608/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/structseg.py and restored-20230608/CircuitSeeker/structseg.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/ restored-20230607/CircuitSeeker/
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd and restored-20230607/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd and restored-20230607/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd and restored-20230607/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd and restored-20230607/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_image_histogram.npy and restored-20230607/CircuitSeeker/data/confocal/training_image_histogram.npy are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/.DS_Store and restored-20230607/CircuitSeeker/data/.DS_Store are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/defreg.py and restored-20230607/CircuitSeeker/defreg.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/distributed.py and restored-20230607/CircuitSeeker/distributed.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/fileio.py and restored-20230607/CircuitSeeker/fileio.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__init__.py and restored-20230607/CircuitSeeker/__init__.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230607/CircuitSeeker/mocorr.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json and restored-20230607/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 and restored-20230607/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json and restored-20230607/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 and restored-20230607/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 and restored-20230607/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks.py and restored-20230607/CircuitSeeker/networks.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/defreg.cpython-37.pyc and restored-20230607/CircuitSeeker/__pycache__/defreg.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-311.pyc and restored-20230607/CircuitSeeker/__pycache__/distributed.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-36.pyc and restored-20230607/CircuitSeeker/__pycache__/distributed.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-37.pyc and restored-20230607/CircuitSeeker/__pycache__/distributed.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-311.pyc and restored-20230607/CircuitSeeker/__pycache__/fileio.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-36.pyc and restored-20230607/CircuitSeeker/__pycache__/fileio.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-37.pyc and restored-20230607/CircuitSeeker/__pycache__/fileio.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-311.pyc and restored-20230607/CircuitSeeker/__pycache__/__init__.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-36.pyc and restored-20230607/CircuitSeeker/__pycache__/__init__.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-37.pyc and restored-20230607/CircuitSeeker/__pycache__/__init__.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230607/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc and restored-20230607/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc and restored-20230607/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/structseg.py and restored-20230607/CircuitSeeker/structseg.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/ restored-20230606/CircuitSeeker/
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd and restored-20230606/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd and restored-20230606/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd and restored-20230606/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd and restored-20230606/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_image_histogram.npy and restored-20230606/CircuitSeeker/data/confocal/training_image_histogram.npy are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/.DS_Store and restored-20230606/CircuitSeeker/data/.DS_Store are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/defreg.py and restored-20230606/CircuitSeeker/defreg.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/distributed.py and restored-20230606/CircuitSeeker/distributed.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/fileio.py and restored-20230606/CircuitSeeker/fileio.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__init__.py and restored-20230606/CircuitSeeker/__init__.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230606/CircuitSeeker/mocorr.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json and restored-20230606/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 and restored-20230606/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json and restored-20230606/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 and restored-20230606/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 and restored-20230606/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks.py and restored-20230606/CircuitSeeker/networks.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/defreg.cpython-37.pyc and restored-20230606/CircuitSeeker/__pycache__/defreg.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-311.pyc and restored-20230606/CircuitSeeker/__pycache__/distributed.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-36.pyc and restored-20230606/CircuitSeeker/__pycache__/distributed.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-37.pyc and restored-20230606/CircuitSeeker/__pycache__/distributed.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-311.pyc and restored-20230606/CircuitSeeker/__pycache__/fileio.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-36.pyc and restored-20230606/CircuitSeeker/__pycache__/fileio.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-37.pyc and restored-20230606/CircuitSeeker/__pycache__/fileio.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-311.pyc and restored-20230606/CircuitSeeker/__pycache__/__init__.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-36.pyc and restored-20230606/CircuitSeeker/__pycache__/__init__.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-37.pyc and restored-20230606/CircuitSeeker/__pycache__/__init__.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230606/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc and restored-20230606/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc and restored-20230606/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/structseg.py and restored-20230606/CircuitSeeker/structseg.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/ restored-20230605/CircuitSeeker/
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd and restored-20230605/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd and restored-20230605/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd and restored-20230605/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd and restored-20230605/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_image_histogram.npy and restored-20230605/CircuitSeeker/data/confocal/training_image_histogram.npy are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/.DS_Store and restored-20230605/CircuitSeeker/data/.DS_Store are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/defreg.py and restored-20230605/CircuitSeeker/defreg.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/distributed.py and restored-20230605/CircuitSeeker/distributed.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/fileio.py and restored-20230605/CircuitSeeker/fileio.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__init__.py and restored-20230605/CircuitSeeker/__init__.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230605/CircuitSeeker/mocorr.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json and restored-20230605/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 and restored-20230605/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json and restored-20230605/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 and restored-20230605/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 and restored-20230605/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks.py and restored-20230605/CircuitSeeker/networks.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/defreg.cpython-37.pyc and restored-20230605/CircuitSeeker/__pycache__/defreg.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-311.pyc and restored-20230605/CircuitSeeker/__pycache__/distributed.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-36.pyc and restored-20230605/CircuitSeeker/__pycache__/distributed.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-37.pyc and restored-20230605/CircuitSeeker/__pycache__/distributed.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-311.pyc and restored-20230605/CircuitSeeker/__pycache__/fileio.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-36.pyc and restored-20230605/CircuitSeeker/__pycache__/fileio.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-37.pyc and restored-20230605/CircuitSeeker/__pycache__/fileio.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-311.pyc and restored-20230605/CircuitSeeker/__pycache__/__init__.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-36.pyc and restored-20230605/CircuitSeeker/__pycache__/__init__.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-37.pyc and restored-20230605/CircuitSeeker/__pycache__/__init__.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230605/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc and restored-20230605/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc and restored-20230605/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/structseg.py and restored-20230605/CircuitSeeker/structseg.py are identical
+(base) limj2@e06u03 RESTORED $ diff -syqr restored-20230610/CircuitSeeker/CircuitSeeker/ restored-20230604/CircuitSeeker/
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd and restored-20230604/CircuitSeeker/data/confocal/training_forebrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd and restored-20230604/CircuitSeeker/data/confocal/training_forebrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd and restored-20230604/CircuitSeeker/data/confocal/training_hindbrain_crop_labels.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd and restored-20230604/CircuitSeeker/data/confocal/training_hindbrain_crop.nrrd are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/confocal/training_image_histogram.npy and restored-20230604/CircuitSeeker/data/confocal/training_image_histogram.npy are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/data/.DS_Store and restored-20230604/CircuitSeeker/data/.DS_Store are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/defreg.py and restored-20230604/CircuitSeeker/defreg.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/distributed.py and restored-20230604/CircuitSeeker/distributed.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/fileio.py and restored-20230604/CircuitSeeker/fileio.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__init__.py and restored-20230604/CircuitSeeker/__init__.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/mocorr.py and restored-20230604/CircuitSeeker/mocorr.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json and restored-20230604/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/config.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 and restored-20230604/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/events.out.tfevents.1583594149.fleishmang-lm1 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json and restored-20230604/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/thresholds.json are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 and restored-20230604/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_best.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 and restored-20230604/CircuitSeeker/networks/stardist_confocal_nucleargcamp/stardist/weights_last.h5 are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/networks.py and restored-20230604/CircuitSeeker/networks.py are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/defreg.cpython-37.pyc and restored-20230604/CircuitSeeker/__pycache__/defreg.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-311.pyc and restored-20230604/CircuitSeeker/__pycache__/distributed.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-36.pyc and restored-20230604/CircuitSeeker/__pycache__/distributed.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/distributed.cpython-37.pyc and restored-20230604/CircuitSeeker/__pycache__/distributed.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-311.pyc and restored-20230604/CircuitSeeker/__pycache__/fileio.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-36.pyc and restored-20230604/CircuitSeeker/__pycache__/fileio.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/fileio.cpython-37.pyc and restored-20230604/CircuitSeeker/__pycache__/fileio.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-311.pyc and restored-20230604/CircuitSeeker/__pycache__/__init__.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-36.pyc and restored-20230604/CircuitSeeker/__pycache__/__init__.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/__init__.cpython-37.pyc and restored-20230604/CircuitSeeker/__pycache__/__init__.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc and restored-20230604/CircuitSeeker/__pycache__/mocorr.cpython-311.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc and restored-20230604/CircuitSeeker/__pycache__/mocorr.cpython-36.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc and restored-20230604/CircuitSeeker/__pycache__/mocorr.cpython-37.pyc are identical
+Files restored-20230610/CircuitSeeker/CircuitSeeker/structseg.py and restored-20230604/CircuitSeeker/structseg.py are identical
+#+end_src
+
+* <2023-06-27 Tue> Python kernel crashes when motionCorrection not run on chunks
+** ~SimpleITK~ doesn't support dask delayed input
+*** This work
+#+begin_src python
+import SimpleITK as sitk
+import CircuitSeeker.mocorr as csm
+
+fixed = csm.ensureArray('/scratch/limj2/data/raw/20230519/fish00/7dpf_gfap-trpv1-gfap-jrgeco1b_ref-stack_fish00_exp01_20230519_160443/processed/im_CM0_fixed_reference.h5', 'default')
+fixed = fixed.astype(np.float32)
+print(type(fixed), fixed.shape, fixed.dtype)
+fixed_im = sitk.GetImageFromArray(fixed)
+#+end_src
+
+*** This also works
+#+begin_src python
+_, resampled_slice = csm.applyTransform('/scratch/limj2/data/raw/20230519/fish00/7dpf_gfap-trpv1-gfap-jrgeco1b_pause-probe_fish00_exp02_20230519_161124/im_CM0/TM0000000_CM0_CHN00.h5',
+                                    np.array([5., 0.40625, 0.40625]),
+                                    params[0],
+                                    fixed='/scratch/limj2/data/raw/20230519/fish00/7dpf_gfap-trpv1-gfap-jrgeco1b_ref-stack_fish00_exp01_20230519_160443/processed/im_CM0_fixed_reference.h5',
+                                    fixed_vox=np.array([1., 0.40625, 0.40625]),
+                                    fixed_slice=(slice(None, None, None), slice(None, None, None), slice(None, None, None)),
+                                    moving_slice=(slice(None, None, None), slice(None, None, None), slice(None, None, None)),
+                                    return_resampled_slice=True, dataset_path='default', pad_fixed=0)
+#+end_src

@@ -12,6 +12,7 @@ import SimpleITK as sitk
 import zarr
 from numcodecs import Blosc
 
+
 def ensureArray(reference, dataset_path=None):
     """
     """
@@ -21,8 +22,10 @@ def ensureArray(reference, dataset_path=None):
         reference = reference.compute()
     elif not isinstance(reference, np.ndarray):
         if not isinstance(reference, str):
-            raise ValueError("image references must be ndarrays or filepaths")
-        reference = csio.readImage(reference, dataset_path)[...]  # hdf5 arrays are lazy
+            raise ValueError(
+                f"image references must be ndarrays or filepaths and not {type(reference)}")
+        reference = csio.readImage(
+            reference, dataset_path)[...]  # hdf5 arrays are lazy
     return reference
 
 
@@ -33,8 +36,8 @@ def rigidAlign(
         moving_slice=(slice(None), slice(None), slice(None)),
         dataset_path=None,
         metric_sample_percentage=0.1,
-        shrink_factors=[2,1],
-        smooth_sigmas=[1,0],
+        shrink_factors=[2, 1],
+        smooth_sigmas=[1, 0],
         minStep=0.1,
         learningRate=1.0,
         numberOfIterations=50,
@@ -94,7 +97,8 @@ def rigidAlign(
     # metric, built for speed
     # Primer on the different similarity metrics: https://itk.org/Doxygen/html/ImageSimilarityMetricsPage.html
     # irm.SetMetricAsMeanSquares()    # Greg's defualt, intensity values in the same range (https://simpleitk.readthedocs.io/en/master/link_ImageRegistrationMethod1_docs.html)
-    irm.SetMetricAsCorrelation()    # intensity values related by a linear transformation (https://simpleitk.readthedocs.io/en/master/link_ImageRegistrationMethod3_docs.html)
+    # intensity values related by a linear transformation (https://simpleitk.readthedocs.io/en/master/link_ImageRegistrationMethod3_docs.html)
+    irm.SetMetricAsCorrelation()
     # irm.SetMetricAsMattesMutualInformation()  ## seems to be the best; used to align data of different modalities
 
     irm.SetMetricSamplingStrategy(irm.RANDOM)
@@ -120,8 +124,9 @@ def rigidAlign(
     # execute, convert to numpy and return
     transform = irm.Execute(sitk.Cast(fixed, sitk.sitkFloat32),
                             sitk.Cast(moving, sitk.sitkFloat32),
-    )
+                            )
     return transform.GetParameters()
+
 
 def rigidAlignAndSave(
         fixed, moving,
@@ -130,8 +135,8 @@ def rigidAlignAndSave(
         moving_slice=(slice(None), slice(None), slice(None)),
         dataset_path=None,
         metric_sample_percentage=0.1,
-        shrink_factors=[2,1],
-        smooth_sigmas=[1,0],
+        shrink_factors=[2, 1],
+        smooth_sigmas=[1, 0],
         minStep=0.1,
         learningRate=1.0,
         numberOfIterations=50,
@@ -152,18 +157,21 @@ def rigidAlignAndSave(
                            pad_fixed=pad_fixed,
                            target_spacing=target_spacing)
 
-    if savepath: np.save(savepath, transform)
+    if savepath:
+        np.save(savepath, transform)
 
     return transform
 
 
 def planes_with_some_data(arr, percentage):
 
-    nonzero_z, nonzero_y, nonzero_x = np.nonzero(arr)  # 2.78 s for arr of shape (70, 1152, 2048)
+    # 2.78 s for arr of shape (70, 1152, 2048)
+    nonzero_z, nonzero_y, nonzero_x = np.nonzero(arr)
 
     plane_npixels = arr.shape[1] * arr.shape[2]
 
-    unique, counts = np.unique(nonzero_z, return_counts=True) # 2.63 s  for arr of shape (70, 1152, 2048)
+    # 2.63 s  for arr of shape (70, 1152, 2048)
+    unique, counts = np.unique(nonzero_z, return_counts=True)
     ratio_counts = counts / plane_npixels
     plane_inds = unique[ratio_counts > percentage]
 
@@ -192,17 +200,19 @@ def applyTransform(
     # get the moving image as a numpy array
     moving = ensureArray(moving, dataset_path)[moving_slice]
     moving_nplanes = moving.shape[0]
-    original_moving_dtype = moving.dtype  ## take note of original dtype before changing
+    # take note of original dtype before changing
+    original_moving_dtype = moving.dtype
 
-    ## function does not accept float16 dtype:
-    ## https://github.com/SimpleITK/SimpleITK/commit/88e2b1326ecfcf06309cb47d01371f95841170af#diff-a53c412a58e7abe996888298507037d7ac451eb3fce3956bd7a6fca35fc29245R667
-    if original_moving_dtype == np.float16: moving = moving.astype(np.float32)
+    # function does not accept float16 dtype:
+    # https://github.com/SimpleITK/SimpleITK/commit/88e2b1326ecfcf06309cb47d01371f95841170af#diff-a53c412a58e7abe996888298507037d7ac451eb3fce3956bd7a6fca35fc29245R667
+    if original_moving_dtype == np.float16:
+        moving = moving.astype(np.float32)
 
     # use sitk transform and interpolation to apply transform
     moving_im = sitk.GetImageFromArray(moving)
     moving_im.SetSpacing(moving_vox[::-1])  # numpy z,y,x --> itk x,y,z
 
-    del moving  ## attempt to save memory
+    del moving  # attempt to save memory
 
     if fixed is not None and fixed_vox is not None:
 
@@ -219,32 +229,34 @@ def applyTransform(
         fixed_im = sitk.GetImageFromArray(fixed)
         fixed_im.SetSpacing(fixed_vox[::-1])
 
-        del fixed  ## attempt to save memory
+        del fixed  # attempt to save memory
 
         transformed_im = sitk.Resample(moving_im, fixed_im, transform,
-                                    sitk.sitkNearestNeighbor, 0.0, moving_im.GetPixelID()
-                                    )
+                                       sitk.sitkNearestNeighbor, 0.0, moving_im.GetPixelID()
+                                       )
     else:
-        aligne_to_fixed = False
+        align_to_fixed = False
         transformed_im = sitk.Resample(moving_im, moving_im, transform,
-                                    sitk.sitkNearestNeighbor, 0.0, moving_im.GetPixelID()
-                                    )
+                                       sitk.sitkNearestNeighbor, 0.0, moving_im.GetPixelID()
+                                       )
 
-    transformed = sitk.GetArrayFromImage(transformed_im)   ## float32
+    transformed = sitk.GetArrayFromImage(transformed_im)  # float32
 
     # downsample in z because there's only so much data (e.g. from nearest neighbour)
     if align_to_fixed:
 
         from scipy.ndimage import zoom
         zoom_factor = fixed_vox/moving_vox
-        zoomed = zoom(transformed, zoom_factor, order=0)  ## zoom every 5um since that's the voxel spacing of the functional data we collected
+        # zoom every 5um since that's the voxel spacing of the functional data we collected
+        zoomed = zoom(transformed, zoom_factor, order=0)
 
-        del transformed  ## attempt to save memory
+        del transformed  # attempt to save memory
 
         if resampled_slice is None:
             # take the middle elements from zoomed
             plane_inds = planes_with_some_data(zoomed, 0.4)
-            resampled_slice = slice(plane_inds[0],plane_inds[0]+moving_nplanes)
+            resampled_slice = slice(
+                plane_inds[0], plane_inds[0]+moving_nplanes)
             print(zoomed.shape)
             print(resampled_slice)
 
@@ -259,11 +271,12 @@ def applyTransform(
     else:
         return zoomed
 
+
 def applyTransformAndSave(moving, moving_vox, params, fixed=None, fixed_vox=None,
                           fixed_slice=(slice(None), slice(None), slice(None)),
                           moving_slice=(slice(None), slice(None), slice(None)),
                           resampled_slice=None, return_resampled_slice=False, dataset_path=None, pad_fixed=False,
-                          save_path='', chunks=(1,100,100)):
+                          save_path='', chunks=(1, 100, 100)):
     """Apply the transform with an option to save if `savepath` is provided
     moving [np.ndarray or str]: the moving image, usually the functional image
     moving_vox [np.ndarray]: voxel spacing
@@ -278,29 +291,33 @@ def applyTransformAndSave(moving, moving_vox, params, fixed=None, fixed_vox=None
                                                       resampled_slice=resampled_slice, return_resampled_slice=return_resampled_slice,
                                                       dataset_path=dataset_path, pad_fixed=pad_fixed)
     else:
-         transformed = applyTransform(moving, moving_vox, params, fixed=fixed, fixed_vox=fixed_vox,
-                                      fixed_slice=fixed_slice, moving_slice=moving_slice,
-                                      resampled_slice=resampled_slice, return_resampled_slice=return_resampled_slice,
-                                      dataset_path=dataset_path, pad_fixed=pad_fixed)
-
+        transformed = applyTransform(moving, moving_vox, params, fixed=fixed, fixed_vox=fixed_vox,
+                                     fixed_slice=fixed_slice, moving_slice=moving_slice,
+                                     resampled_slice=resampled_slice, return_resampled_slice=return_resampled_slice,
+                                     dataset_path=dataset_path, pad_fixed=pad_fixed)
 
     from analysis_toolbox.fileio import saveas_h5
     if save_path:
-        saveas_h5(save_path, data=[transformed], dset_names=[dataset_path], chunks=chunks, overwrite=True)
+        saveas_h5(save_path, data=[transformed], dset_names=[
+                  dataset_path], chunks=chunks, overwrite=True)
         return save_path
 
     else:
         return transformed
 
 # useful format conversions for rigid transforms
+
+
 def _euler3DTransformToParameters(euler):
     """
     """
-    return np.array(( euler.GetAngleX(),
-                      euler.GetAngleY(),
-                      euler.GetAngleZ() ) +
-                      euler.GetTranslation()
-                   )
+    return np.array((euler.GetAngleX(),
+                     euler.GetAngleY(),
+                     euler.GetAngleZ()) +
+                    euler.GetTranslation()
+                    )
+
+
 def _parametersToEuler3DTransform(params):
     """
     """
@@ -308,12 +325,14 @@ def _parametersToEuler3DTransform(params):
     transform.SetRotation(*params[:3])
     transform.SetTranslation(params[3:])
     return transform
+
+
 def _parametersToRigidMatrix(params):
     """
     """
     transform = _parametersToEuler3DTransform(params)
     matrix = np.eye(4)
-    matrix[:3, :3] = np.array(transform.GetMatrix()).reshape((3,3))
+    matrix[:3, :3] = np.array(transform.GetMatrix()).reshape((3, 3))
     matrix[:3, -1] = np.array(transform.GetTranslation())
     return matrix
 
@@ -366,9 +385,9 @@ def motionCorrect(
     if distributed_state is None:
         ds = csd.distributedState()
         # writing large compressed chunks locks GIL for a long time
-        ds.modifyConfig({'distributed.comm.timeouts.connect':'60s',
-                         'distributed.comm.timeouts.tcp':'180s',}
-        )
+        ds.modifyConfig({'distributed.comm.timeouts.connect': '60s',
+                         'distributed.comm.timeouts.tcp': '180s', }
+                        )
         ds.initializeLSFCluster(
             # job_extra=["-P scicompsoft"]
         )
@@ -377,7 +396,8 @@ def motionCorrect(
     # create (lazy) dask bag from all frames
     frame_paths = csio.globPaths(folder, prefix, suffix)
     nframes = len(frame_paths)
-    frames = csio.daskBagOfFilePaths(folder, prefix, suffix, slicer=folder_slicer)
+    frames = csio.daskBagOfFilePaths(
+        folder, prefix, suffix, slicer=folder_slicer)
 
     # scale cluster carefully
     if distributed_state is None:
@@ -399,14 +419,13 @@ def motionCorrect(
                                         fixed_slice=fixed_slice, moving_slice=moving_slice,
                                         transforms_dir=transforms_dir, resume=resume, pad_fixed=pad_fixed, time_stride=time_stride)
 
-
     # transform frames with params
     chunksize = 5000
 
-    ## SOME INCONSISTENCIES between applying to chunks and not applying
-    ## 1. Chunking saves to h5 while not saves to zarr
-    ## 2. Resuming is not enabled on not chunking
-    if (nframes > chunksize or num_tchunks) and not force_not_chunk:
+    # SOME INCONSISTENCIES between applying to chunks and not applying
+    # 1. Chunking saves to h5 while not saves to zarr
+    # 2. Resuming is not enabled on not chunking
+    if (nframes > chunksize or t_chunksize) and not force_not_chunk:
 
         print("Applying over chunks of frames...")
 
@@ -417,11 +436,12 @@ def motionCorrect(
             # TODO: this is unequal to the not_chunk, which takes in a dask bag of file paths
 
         # work on chunks of frames -- reduce size of task graph
-        if not t_chunksize: t_chunksize = 10
-
+        if not t_chunksize:
+            t_chunksize = 10
 
         from analysis_toolbox.utils import find_files
-        actual_write_paths = find_files(write_path + '/', ext='h5', compute_paths=True)['path']
+        actual_write_paths = find_files(
+            write_path + '/', ext='h5', compute_paths=True)['path']
         CM = frame_paths[0][-12:-9]
 
         if resume:
@@ -430,16 +450,19 @@ def motionCorrect(
 
             print("Resuming application of transforms...")
             from analysis_toolbox.dataset_helper import format_integer_to_zebrascope_standard
-            expected_write_paths = [write_path+f'/{format_integer_to_zebrascope_standard(index, CM)}.h5' for index in np.arange(len(params))]
-            missing_write_paths = np.setdiff1d(expected_write_paths, actual_write_paths)
-            missing_indices = np.array([np.where(np.array(expected_write_paths)==missing_write_path)[0][0] for missing_write_path in tqdm(missing_write_paths)])
+            expected_write_paths = [
+                write_path+f'/{format_integer_to_zebrascope_standard(index, CM)}.h5' for index in np.arange(len(params))]
+            missing_write_paths = np.setdiff1d(
+                expected_write_paths, actual_write_paths)
+            missing_indices = np.array([np.where(np.array(expected_write_paths) == missing_write_path)[
+                                       0][0] for missing_write_path in tqdm(missing_write_paths)])
 
             if len(actual_write_paths) == 0:
 
                 print("nothing computed yet, start fresh!")
                 if t_indices is None:
                     t_indices = np.arange(nframes)
-                npartitions = len(t_indices)// t_chunksize
+                npartitions = len(t_indices) // t_chunksize
                 indices = db.from_sequence(t_indices, npartitions=npartitions)
                 computing = True
 
@@ -448,12 +471,13 @@ def motionCorrect(
                 print(f"{len(missing_indices)}/{len(expected_write_paths)} missing")
 
                 npartitions = len(missing_indices) // t_chunksize
-                indices = db.from_sequence(missing_indices, npartitions=npartitions)
+                indices = db.from_sequence(
+                    missing_indices, npartitions=npartitions)
                 computing = True
 
             elif len(missing_indices) == 0:
 
-               computing = False
+                computing = False
 
         else:
 
@@ -466,8 +490,6 @@ def motionCorrect(
             indices = db.from_sequence(t_indices, npartitions=npartitions)
             computing = True
 
-
-
         if computing:
 
             if isinstance(frames_to_correct, str):
@@ -476,7 +498,9 @@ def motionCorrect(
                     import zarr
                     frame_paths = zarr.open(frames_to_correct, mode='r')
                 else:
-                    frame_paths = np.array(csio.globPaths(frames_to_correct, suffix='.h5', prefix='TM'))  ## convert to array for array indexing
+                    # convert to array for array indexing
+                    frame_paths = np.array(csio.globPaths(
+                        frames_to_correct, suffix='.h5', prefix='TM'))
             elif isinstance(frames_to_correct, da.Array):
                 fileext = None
                 pass
@@ -503,7 +527,7 @@ def motionCorrect(
 
                 resampling_fixed = None
 
-            ## TODO: replace applyTransformToChunksOfFrames with applyTransformToAChunkOfFrames and use the former wrap everything in this block
+            # TODO: replace applyTransformToChunksOfFrames with applyTransformToAChunkOfFrames and use the former wrap everything in this block
             transformed = indices.map_partitions(applyTransformToChunksOfFrames,
                                                  frame_dir=frames_to_correct, params_path=transforms_dir + '/params.npy',
                                                  moving_vox=moving_vox, dataset_path=dataset_path,
@@ -513,19 +537,22 @@ def motionCorrect(
                                                  fixed=resampling_fixed, fixed_vox=dfixed_vox, pad_fixed=pad_fixed).to_delayed()
 
             if write_path is None:
-                indices_len = list(indices.map_partitions(lambda x: len(x)).compute())
+                indices_len = list(indices.map_partitions(
+                    lambda x: len(x)).compute())
 
-                ## use the original frames pre-motion correction as an example
+                # use the original frames pre-motion correction as an example
                 if isinstance(frames_to_correct, str):
-                    example_image = csio.readImage(frames.compute()[0], dataset_path=dataset_path)[...]
+                    example_image = csio.readImage(
+                        frames.compute()[0], dataset_path=dataset_path)[...]
                 elif isinstance(frames_to_correct, da.Array):
                     example_image = frames_to_correct[0]
 
-                ## TODO: the shape changes when pad_fixed is used
+                # TODO: the shape changes when pad_fixed is used
                 shape = example_image.shape
                 dtype = example_image.dtype
 
-                arrays = [da.from_delayed(t, shape=(ilen, *shape), dtype=dtype) for t, ilen in zip(transformed,indices_len)]  ## if resuming, this won't be the full array
+                arrays = [da.from_delayed(t, shape=(ilen, *shape), dtype=dtype) for t, ilen in zip(
+                    transformed, indices_len)]  # if resuming, this won't be the full array
                 transformed = da.concatenate(arrays, axis=0)
 
         else:
@@ -535,26 +562,31 @@ def motionCorrect(
 
     else:
 
-        ## TODO: resume not enabled here!
+        # TODO: resume not enabled here!
         print("Applying over frames...")
 
         if correct_another is not None:
             if isinstance(correct_another, str):
                 correct_another = da.from_zarr(correct_another)
-            ## expecting dask array
-            frames_to_correct = db.from_sequence(correct_another, npartitions=correct_another.shape[0])  # takes a really long time
+            # expecting dask array
+            frames_to_correct = db.from_sequence(
+                correct_another, npartitions=correct_another.shape[0])  # takes a really long time
         else:
             frames_to_correct = frames  # dask bag of file paths
 
         if resample_with_fixed:
 
             resampled_slice_ref_index = 0
-            print(frame_paths[resampled_slice_ref_index])
-            resampling_fixed = dfixed
-            _, resampled_slice = applyTransform(frame_paths[resampled_slice_ref_index], moving_vox, params[resampled_slice_ref_index],
-                                                fixed=resampling_fixed, fixed_vox=dfixed_vox,
+            print(
+                f"Resampling the following stack: {frame_paths[resampled_slice_ref_index]}")
+            resampling_fixed = fixed
+            _, resampled_slice = applyTransform(frame_paths[resampled_slice_ref_index],
+                                                moving_vox,
+                                                params[resampled_slice_ref_index],
+                                                fixed=resampling_fixed, fixed_vox=fixed_vox,
                                                 fixed_slice=fixed_slice, moving_slice=moving_slice,
                                                 return_resampled_slice=True, dataset_path=dataset_path, pad_fixed=pad_fixed)
+
             print(f'Resampled slice: {resampled_slice}')
 
         else:
@@ -575,6 +607,7 @@ def motionCorrect(
     # return reference to data
     return params, transformed, resampled_slice
 
+
 def runAlignFramesToReference(
         folder, prefix, suffix,
         fixed, fixed_vox, moving_vox,
@@ -593,19 +626,21 @@ def runAlignFramesToReference(
     if distributed_state is None:
         ds = csd.distributedState()
         # writing large compressed chunks locks GIL for a long time
-        ds.modifyConfig({'distributed.comm.timeouts.connect':'60s',
-                         'distributed.comm.timeouts.tcp':'180s',}
-        )
+        ds.modifyConfig({'distributed.comm.timeouts.connect': '60s',
+                         'distributed.comm.timeouts.tcp': '180s', }
+                        )
         ds.initializeLSFCluster(
             # job_extra=["-P scicompsoft"]
         )
         ds.initializeClient()
 
-    if folder_slicer is None: folder_slicer = slice(len(files))
+    if folder_slicer is None:
+        folder_slicer = slice(len(files))
     # create (lazy) dask bag from all frames
     frame_paths = csio.globPaths(folder, prefix, suffix)
     nframes = len(frame_paths)
-    frames = csio.daskBagOfFilePaths(folder, prefix, suffix, slicer=folder_slicer)
+    frames = csio.daskBagOfFilePaths(
+        folder, prefix, suffix, slicer=folder_slicer)
 
     # scale cluster carefully
     if distributed_state is None:
@@ -637,7 +672,8 @@ def runAlignFramesToReference(
 def alignFramesToReference(frame_paths, dfixed, dfixed_vox, dmoving_vox,
                            sigma, ddataset_path, time_stride=1,
                            fixed_slice=(slice(None), slice(None), slice(None)),
-                           moving_slice=(slice(None), slice(None), slice(None)),
+                           moving_slice=(
+                               slice(None), slice(None), slice(None)),
                            resume=True, transforms_dir=None, pad_fixed=False):
     """
     frames [db.Bag]: dask bag of file paths
@@ -645,27 +681,31 @@ def alignFramesToReference(frame_paths, dfixed, dfixed_vox, dmoving_vox,
 
     from scipy.ndimage import percentile_filter, gaussian_filter1d
 
-    ## I believe this request workers
-    expected_param_savepaths = [os.path.join(transforms_dir, os.path.splitext(os.path.basename(path))[0] + '_rigid.npy') for path in frame_paths]
+    # I believe this request workers
+    expected_param_savepaths = [os.path.join(transforms_dir, os.path.splitext(
+        os.path.basename(path))[0] + '_rigid.npy') for path in frame_paths]
 
     if resume:
         from analysis_toolbox.utils import find_files
         from tqdm.notebook import tqdm
 
-        actual_param_savepaths = find_files(transforms_dir + '/', grep='TM', ext='npy', compute_paths=True)['path']
+        actual_param_savepaths = find_files(
+            transforms_dir + '/', grep='TM', ext='npy', compute_paths=True)['path']
 
         if len(actual_param_savepaths) == 0:
 
-            resume = False  ## nothing to resume
+            resume = False  # nothing to resume
             savepaths = expected_param_savepaths
             framepaths = frame_paths
 
         else:
 
-            missing_param_savepaths = np.setdiff1d(expected_param_savepaths, actual_param_savepaths)
+            missing_param_savepaths = np.setdiff1d(
+                expected_param_savepaths, actual_param_savepaths)
             savepaths = missing_param_savepaths
 
-            missing_indices = np.array([np.where(np.array(expected_param_savepaths)==missing_param_savepath)[0][0] for missing_param_savepath in tqdm(missing_param_savepaths)])
+            missing_indices = np.array([np.where(np.array(expected_param_savepaths) == missing_param_savepath)[
+                                       0][0] for missing_param_savepath in tqdm(missing_param_savepaths)])
             frame_paths = np.array(frame_paths)[missing_indices]
             framepaths = frame_paths
 
@@ -674,37 +714,39 @@ def alignFramesToReference(frame_paths, dfixed, dfixed_vox, dmoving_vox,
         savepaths = expected_param_savepaths
         framepaths = frame_paths
 
-    ## subsample if requested
+    # subsample if requested
     if not resume and time_stride > 1:
         total_nframes = len(framepaths)
-        ## calculate the frames to compute, taking care to include the last frame
-        ## remove the last frame if it is already included in np.arange (i.e. it is repeated after appending)
-        time_slice = np.unique(np.append(np.arange(0, total_nframes, time_stride), total_nframes-1)).astype('int')
+        # calculate the frames to compute, taking care to include the last frame
+        # remove the last frame if it is already included in np.arange (i.e. it is repeated after appending)
+        time_slice = np.unique(np.append(
+            np.arange(0, total_nframes, time_stride), total_nframes-1)).astype('int')
         print(time_slice)
         savepaths = np.array(savepaths)[time_slice]
         framepaths = np.array(framepaths)[time_slice]
         compute_nframes = len(framepaths)
 
-    ## convert paths to dask bags
+    # convert paths to dask bags
     savepaths_bag = db.from_sequence(savepaths, npartitions=len(savepaths))
     framepaths_bag = db.from_sequence(framepaths, npartitions=len(framepaths))
 
-    params = framepaths_bag.map(lambda b,c,d,s,t,w,x,y,z: rigidAlignAndSave(w,b,x,y,
-                                                                        fixed_slice=s, moving_slice=t,
-                                                                        dataset_path=z, pad_fixed=d, savepath=c),
+    params = framepaths_bag.map(lambda b, c, d, s, t, w, x, y, z: rigidAlignAndSave(w, b, x, y,
+                                                                                    fixed_slice=s, moving_slice=t,
+                                                                                    dataset_path=z, pad_fixed=d, savepath=c),
                                 s=fixed_slice, t=moving_slice,
                                 w=dfixed, x=dfixed_vox, y=dmoving_vox, z=ddataset_path, d=pad_fixed, c=savepaths_bag,
-    ).compute()
+                                ).compute()
 
-    ## if not resuming, then only rely on the params recently computed
+    # if not resuming, then only rely on the params recently computed
     if not resume:
         params = np.array(list(params))
     else:
-        ## reload from files, because the latest run might not have all the params
-        params = np.stack([np.load(expected_param_savepath, allow_pickle=True) for expected_param_savepath in tqdm(expected_param_savepaths)])
+        # reload from files, because the latest run might not have all the params
+        params = np.stack([np.load(expected_param_savepath, allow_pickle=True)
+                          for expected_param_savepath in tqdm(expected_param_savepaths)])
 
     # (weak) outlier removal and smoothing
-    params = percentile_filter(params, 50, footprint=np.ones((3,1)))
+    params = percentile_filter(params, 50, footprint=np.ones((3, 1)))
     params = gaussian_filter1d(params, sigma, axis=0)
 
     # interpolate
@@ -721,25 +763,31 @@ def alignFramesToReference(frame_paths, dfixed, dfixed_vox, dmoving_vox,
 
     # write transforms as matrices
     if transforms_dir is not None:
-        if not os.path.exists(transforms_dir): os.makedirs(transforms_dir)
+        if not os.path.exists(transforms_dir):
+            os.makedirs(transforms_dir)
         np.save(transforms_dir + '/params.npy', params)
 
         for ind, p in enumerate(params):
             transform = _parametersToRigidMatrix(p)
-            basename = os.path.splitext(os.path.basename(expected_param_savepaths[ind]))[0]
+            basename = os.path.splitext(
+                os.path.basename(expected_param_savepaths[ind]))[0]
             matpath = os.path.join(transforms_dir, basename) + '.mat'
             npypath = os.path.join(transforms_dir, basename) + '.npy'
             np.savetxt(matpath, transform)
-            if not os.path.exists(npypath): np.save(npypath, p)
+            if not os.path.exists(npypath):
+                np.save(npypath, p)
 
     return params
 
 
 def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, dataset_path,
-                                   fixed_slice=(slice(None), slice(None), slice(None)),
-                                   moving_slice=(slice(None), slice(None), slice(None)),
+                                   fixed_slice=(slice(None), slice(
+                                       None), slice(None)),
+                                   moving_slice=(
+                                       slice(None), slice(None), slice(None)),
                                    resampled_slice=None,
-                                   slice_transformed=(slice(None), slice(None), slice(None)),
+                                   slice_transformed=(
+                                       slice(None), slice(None), slice(None)),
                                    index_first=False, write_path='',
                                    fixed=None, fixed_vox=None, pad_fixed=False):
     """Apply transform to a few frames instead of one at a time
@@ -752,7 +800,7 @@ def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, 
     dataset_path [str]: .h5 data path
     """
 
-    ## determine frame_paths and load params
+    # determine frame_paths and load params
     if isinstance(frame_dir, str):
         filename, fileext = os.path.splitext(frame_dir)
         if fileext == '.zarr':
@@ -760,7 +808,9 @@ def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, 
             # frame_paths = da.from_zarr(frame_dir, inline_array=True)
             frame_paths = zarr.open(frame_dir, mode='r')
         else:
-            frame_paths = np.array(csio.globPaths(frame_dir, suffix='.h5', prefix='TM'))  ## convert to array for array indexing
+            # convert to array for array indexing
+            frame_paths = np.array(csio.globPaths(
+                frame_dir, suffix='.h5', prefix='TM'))
     elif isinstance(frame_dir, da.Array):
         fileext = None
         pass
@@ -772,25 +822,29 @@ def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, 
             from pathlib import Path
             Path(write_path).mkdir(parents=True, exist_ok=True)
 
-        ## inconsistent between the two conditions
+        # inconsistent between the two conditions
         if fileext == '':
             from analysis_toolbox.utils import change_root_dir_in_path
             from functools import partial
-            change_root_dir_in_path_for_transformed = partial(change_root_dir_in_path, replace_with=write_path)
-            save_paths = np.vectorize(change_root_dir_in_path_for_transformed)(frame_paths)
+            change_root_dir_in_path_for_transformed = partial(
+                change_root_dir_in_path, replace_with=write_path)
+            save_paths = np.vectorize(
+                change_root_dir_in_path_for_transformed)(frame_paths)
 
         elif fileext == '.zarr' or fileext == '.h5':
             from analysis_toolbox.dataset_helper import format_integer_to_zebrascope_standard
-            save_paths = [write_path+f'/{format_integer_to_zebrascope_standard(index)}.h5' for index in np.arange(len(params))]
+            save_paths = [
+                write_path+f'/{format_integer_to_zebrascope_standard(index)}.h5' for index in np.arange(len(params))]
 
     else:
         save_paths = np.full((len(params),), '')
 
-    if isinstance(indices, list): indices = np.array(indices)
+    if isinstance(indices, list):
+        indices = np.array(indices)
     indices = indices.astype('int')
 
     if index_first:
-        ## index into frame_paths and params
+        # index into frame_paths and params
         indexed_frame_paths = frame_paths[indices]
         indexed_params = params[indices]
         indexed_save_pahts = save_paths[indices]
@@ -799,21 +853,21 @@ def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, 
         # if isinstance(indexed_frame_paths, da.Array):
         #     indexed_frame_paths = indexed_frame_paths.compute()
 
-        out  = [applyTransformAndSave(frame_path, moving_vox, param,
-                                      dataset_path=dataset_path, save_path=save_path,
-                                      fixed=fixed, fixed_vox=fixed_vox,
-                                      fixed_slice=fixed_slice, moving_slice=moving_slice,
-                                      resampled_slice=resampled_slice, pad_fixed=pad_fixed)  \
-                for frame_path, param, save_path in zip(indexed_frame_paths, indexed_params, indexed_save_paths)]
+        out = [applyTransformAndSave(frame_path, moving_vox, param,
+                                     dataset_path=dataset_path, save_path=save_path,
+                                     fixed=fixed, fixed_vox=fixed_vox,
+                                     fixed_slice=fixed_slice, moving_slice=moving_slice,
+                                     resampled_slice=resampled_slice, pad_fixed=pad_fixed)
+               for frame_path, param, save_path in zip(indexed_frame_paths, indexed_params, indexed_save_paths)]
 
-        del params, indices, indexed_frame_paths, indexed_params  ## atttmpt to save memeory
+        del params, indices, indexed_frame_paths, indexed_params  # atttmpt to save memeory
 
     else:
         out = [applyTransformAndSave(frame_paths[index], moving_vox, params[index],
                                      dataset_path=dataset_path, save_path=save_paths[index],
                                      fixed=fixed, fixed_vox=fixed_vox,
                                      fixed_slice=fixed_slice, moving_slice=moving_slice,
-                                     resampled_slice=resampled_slice, pad_fixed=pad_fixed) \
+                                     resampled_slice=resampled_slice, pad_fixed=pad_fixed)
                for index in indices]
 
         del params, indices
@@ -823,7 +877,8 @@ def applyTransformToChunksOfFrames(indices, frame_dir, params_path, moving_vox, 
 
 def applyTransformToFrames(frames, params, dmoving_vox, ddataset_path,
                            fixed_slice=(slice(None), slice(None), slice(None)),
-                           moving_slice=(slice(None), slice(None), slice(None)),
+                           moving_slice=(
+                               slice(None), slice(None), slice(None)),
                            slice_transformed=(slice(None), slice(None), slice(None)), write_path=None,
                            fixed=None, fixed_vox=None, pad_fixed=False):
     """
@@ -838,26 +893,29 @@ def applyTransformToFrames(frames, params, dmoving_vox, ddataset_path,
 
     # apply transforms to all images
     params = db.from_sequence(params, npartitions=npartitions)
-    transformed = frames.map(lambda b,x,y,z,p,q,r,s,t: applyTransform(b,x,y, dataset_path=z, fixed=p, fixed_vox=q,
-                                                                  fixed_slice=s, moving_slice=t, pad_fixed=r),
+    transformed = frames.map(lambda b, x, y, z, p, q, r, s, t: applyTransform(b, x, y, dataset_path=z, fixed=p, fixed_vox=q,
+                                                                              fixed_slice=s, moving_slice=t, pad_fixed=r),
                              x=dmoving_vox, y=params, z=ddataset_path, p=fixed, q=fixed_vox,
                              r=pad_fixed, s=fixed_slice, t=moving_slice,
-    ).to_delayed()
+                             ).to_delayed()
 
     # convert to a (lazy) 4D dask array
     sh = transformed[0][0].shape.compute()
     dd = transformed[0][0].dtype.compute()
-    arrays = [da.from_delayed(t[0][slice_transformed], sh, dtype=dd) for t in transformed]
+    arrays = [da.from_delayed(t[0][slice_transformed], sh, dtype=dd)
+              for t in transformed]
     transformed = da.stack(arrays, axis=0)
 
     if write_path is not None:
-        if not os.path.exists(write_path): os.makedirs(write_path)
+        if not os.path.exists(write_path):
+            os.makedirs(write_path)
         # write in parallel as 4D array to zarr file
         compressor = Blosc(cname='zstd', clevel=9, shuffle=Blosc.BITSHUFFLE)
         transformed_disk = zarr.open(write_path, 'w',
-            shape=transformed.shape, chunks=(256, 10, 256, 256),
-            dtype=transformed.dtype, compressor=compressor
-        )
+                                     shape=transformed.shape, chunks=(
+                                         256, 10, 256, 256),
+                                     dtype=transformed.dtype, compressor=compressor
+                                     )
         da.to_zarr(transformed, transformed_disk)
 
     return transformed
@@ -885,9 +943,11 @@ def distributedImageMean(
 
     # hdf5 files use dask.array
     if csio.testPathExtensionForHDF5(suffix):
-        frames = csio.daskArrayBackedByHDF5(folder, prefix, suffix, dataset_path)
+        frames = csio.daskArrayBackedByHDF5(
+            folder, prefix, suffix, dataset_path)
         nframes = frames.shape[0]
-        if distributed_state is None: ds.scaleCluster(njobs=nframes)
+        if distributed_state is None:
+            ds.scaleCluster(njobs=nframes)
 
         if (nframes > 100) and (time_slice == slice(None)):
             time_slice = slice(nframes//2 - 25, nframes//2 + 25)
@@ -900,7 +960,8 @@ def distributedImageMean(
     else:
         frames = csio.daskBagOfFilePaths(folder, prefix, suffix)
         nframes = frames.npartitions
-        if distributed_state is None: ds.scaleCluster(njobs=nframes)
+        if distributed_state is None:
+            ds.scaleCluster(njobs=nframes)
         frames_mean = frames.map(csio.readImage).reduction(sum, sum).compute()
         dtype = frames_mean.dtype
         frames_mean = np.round(frames_mean/np.float(nframes)).astype(dtype)
@@ -918,4 +979,3 @@ def distributedImageMean(
 
     # return reference to mean image
     return frames_mean
-
